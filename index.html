@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>สมุดประจำวิชา</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="สมุดประจำวิชา">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+:root{
+  --bg:#F3F4F9; --surface:#FFFFFF; --surface2:#EEF0F8; --ink:#1D2340; --muted:#5C6280; --line:#D9DCEA;
+  --indigo:#2E3A87; --indigo-soft:#E3E6F7; --lotus:#B83E72; --saffron:#D9801A;
+  --ok:#2E8B57; --ok-soft:#DDF1E5; --warn:#B88400; --warn-soft:#FBF0CF; --bad:#C2364A; --bad-soft:#F8DDE1;
+  --late:#C9661E; --late-soft:#FBE6D6; --act:#2D6FB5; --act-soft:#DCE9F7; --leave:#8A6D00; --leave-soft:#F6EDC4;
+  --shadow:0 1px 2px rgba(29,35,64,.08);
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11142A; --surface:#1A1E3A; --surface2:#232850; --ink:#E7E9F6; --muted:#A3A8C8; --line:#323862;
+    --indigo:#9AA6F2; --indigo-soft:#2A3170; --lotus:#E785B0; --saffron:#F0A64B;
+    --ok:#6FCF97; --ok-soft:#1D3B2C; --warn:#F2C94C; --warn-soft:#3B3418; --bad:#F2879A; --bad-soft:#47222C;
+    --late:#F2A065; --late-soft:#45301F; --act:#86B6EE; --act-soft:#1F3554; --leave:#E8CF6A; --leave-soft:#3A3417;
+    --shadow:none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#11142A; --surface:#1A1E3A; --surface2:#232850; --ink:#E7E9F6; --muted:#A3A8C8; --line:#323862;
+    --indigo:#9AA6F2; --indigo-soft:#2A3170; --lotus:#E785B0; --saffron:#F0A64B;
+    --ok:#6FCF97; --ok-soft:#1D3B2C; --warn:#F2C94C; --warn-soft:#3B3418; --bad:#F2879A; --bad-soft:#47222C;
+    --late:#F2A065; --late-soft:#45301F; --act:#86B6EE; --act-soft:#1F3554; --leave:#E8CF6A; --leave-soft:#3A3417;
+    --shadow:none; color-scheme: dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Sarabun","TH Sarabun New",Tahoma,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+input,select,textarea{touch-action:manipulation}
+:focus-visible{outline:3px solid var(--lotus);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 16px 6px;max-width:1200px;margin:0 auto}
+.brand{display:flex;flex-direction:column;line-height:1.15}
+.brand b{font-size:20px;font-weight:800;color:var(--indigo)}
+.brand span{font-size:13px;color:var(--muted)}
+.save{margin-left:auto;font-size:13px;color:var(--muted);white-space:nowrap}
+.save.busy{color:var(--saffron)} .save.err{color:var(--bad)}
+.rooms{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 10px;max-width:1200px;margin:0 auto;scrollbar-width:none}
+.rooms::-webkit-scrollbar{display:none}
+.room{flex:0 0 auto;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 16px;font-weight:700;font-size:16px}
+.room small{display:block;font-weight:500;font-size:11px;color:var(--muted);line-height:1}
+.room[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.room[aria-pressed="true"] small{color:#E3E6F7}
+main{max-width:1200px;margin:0 auto;padding:14px 16px 110px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs button{flex:1;max-width:200px;border:0;background:none;padding:10px 4px 8px;font-size:14px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+.tabs button svg{width:24px;height:24px}
+.tabs button[aria-selected="true"]{color:var(--indigo)}
+.tabs button[aria-selected="true"] svg{stroke:var(--lotus)}
+h2{font-size:22px;margin:0 0 4px;font-weight:800}
+.sub{color:var(--muted);margin:0 0 12px;font-size:15px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-weight:600;min-height:44px}
+.btn.primary{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.btn.ghost{background:transparent}
+.btn.small{min-height:36px;padding:4px 10px;font-size:14px}
+.muted{color:var(--muted)}
+/* session strip */
+.strip{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;scroll-snap-type:x proximity}
+.sess{flex:0 0 auto;scroll-snap-align:center;width:58px;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:4px 0;text-align:center;font-size:12px;line-height:1.2}
+.sess b{display:block;font-size:17px}
+.sess.done{border-color:var(--ok);background:var(--ok-soft)}
+.sess.hol{background:var(--surface2);color:var(--muted);text-decoration:line-through}
+.sess.exam{border-color:var(--saffron)}
+.sess.today{box-shadow:inset 0 0 0 2px var(--lotus)}
+.sess[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:#fff;text-decoration:none}
+.info{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;margin-bottom:12px}
+.info .when{font-size:19px;font-weight:700}
+.info .what{color:var(--muted);font-size:15px}
+.banner{border-radius:10px;padding:10px 14px;margin:0 0 12px;font-weight:600}
+.banner.hol{background:var(--surface2);color:var(--muted)}
+.banner.exam{background:var(--late-soft);color:var(--late)}
+/* student rows */
+.list{display:flex;flex-direction:column;gap:6px}
+.st{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.st .no{font-weight:800;color:var(--indigo);text-align:center;font-variant-numeric:tabular-nums}
+.st .nm{min-width:0}
+.st .nm b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.st .nm span{font-size:13px;color:var(--muted)}
+.stamps{display:flex;gap:6px}
+.stamp{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--surface);font-weight:800;font-size:19px;color:var(--muted);position:relative}
+.stamp[aria-pressed="true"]{color:#fff;transform:rotate(-8deg);box-shadow:inset 0 0 0 3px rgba(255,255,255,.35)}
+.stamp.c-ม[aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.stamp.c-ส[aria-pressed="true"]{background:var(--late);border-color:var(--late)}
+.stamp.c-ก[aria-pressed="true"]{background:var(--act);border-color:var(--act)}
+.stamp.c-ล[aria-pressed="true"],.stamp.c-ป[aria-pressed="true"]{background:var(--leave);border-color:var(--leave)}
+.stamp.c-ข[aria-pressed="true"]{background:var(--bad);border-color:var(--bad)}
+.stamp.c-✓[aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.stamp.c-x[aria-pressed="true"]{background:var(--bad);border-color:var(--bad)}
+@media (max-width:640px){.stamp{width:40px;height:40px;font-size:17px}.stamps{gap:4px}.st{grid-template-columns:30px minmax(0,1fr)}.st .stamps{grid-column:1/-1;justify-content:flex-end}}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.neu{background:var(--surface2);color:var(--muted)}
+/* items */
+.items{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.item{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 10px;font-size:14px;font-weight:600}
+.item.due{border-color:var(--saffron)}
+.item[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.group-label{font-weight:700;margin:8px 0 6px;font-size:15px}
+.switch{display:flex;align-items:center;gap:10px;font-weight:600}
+.switch input{width:52px;height:30px;appearance:none;background:var(--line);border-radius:999px;position:relative;cursor:pointer;transition:background .15s}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .15s}
+.switch input:checked{background:var(--saffron)} .switch input:checked::after{left:25px}
+.num{width:84px;height:46px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);text-align:center;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.num.missing{border-color:var(--bad);background:var(--bad-soft)}
+/* monitor */
+.counts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.count{border-radius:14px;padding:12px 14px;border:1px solid var(--line);background:var(--surface);text-align:left}
+.count b{font-size:34px;font-weight:800;line-height:1;display:block;font-variant-numeric:tabular-nums}
+.count span{font-size:14px;font-weight:600}
+.count.bad b{color:var(--bad)} .count.warn b{color:var(--warn)} .count.ok b{color:var(--ok)}
+.count[aria-pressed="true"]{outline:3px solid var(--indigo)}
+.alert{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:10px 12px}
+.alert.bad{border-left-color:var(--bad)} .alert.warn{border-left-color:var(--warn)} .alert.ok{border-left-color:var(--ok)}
+.alert .who{font-weight:700;cursor:pointer}
+.reasons{display:flex;flex-wrap:wrap;gap:6px;grid-column:1/-1}
+.msg{grid-column:1/-1;font-size:14px;color:var(--muted)}
+/* grid of 40 */
+.dots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.dot{aspect-ratio:1;border-radius:4px;background:var(--surface2);font-size:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.dot.ม{background:var(--ok)} .dot.ส{background:var(--late)} .dot.ก{background:var(--act)} .dot.ล,.dot.ป{background:var(--leave)} .dot.ข{background:var(--bad)} .dot.h{background:repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 3px,var(--line) 3px,var(--line) 6px)}
+table{border-collapse:collapse;width:100%}
+.tw{overflow-x:auto}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;font-size:15px}
+th{font-size:13px;color:var(--muted);font-weight:700}
+td.n{text-align:center;font-variant-numeric:tabular-nums}
+/* dialog */
+dialog{border:0;border-radius:16px;padding:0;max-width:720px;width:calc(100% - 24px);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(17,20,42,.45)}
+.dlg{padding:16px}
+.dlg header{display:flex;align-items:start;gap:12px;margin-bottom:10px}
+.dlg header h3{margin:0;font-size:21px}
+.dlg header button{margin-left:auto}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:600;color:var(--muted)}
+label.f input,label.f select,label.f textarea{border:1.5px solid var(--line);border-radius:10px;background:var(--surface);padding:8px 10px;font-size:16px;color:var(--ink);min-height:44px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+textarea.out{width:100%;min-height:160px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface2);padding:10px;font-size:15px}
+.empty{text-align:center;padding:40px 16px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:20px;margin-bottom:6px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;z-index:20;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}.stamp[aria-pressed="true"]{transform:none}}
+</style>
+<style>
+.bookbtn{border:1.5px solid var(--line);background:var(--surface2);border-radius:10px;padding:4px 10px;font-weight:700;font-size:14px;min-height:36px}
+.sec{font-size:19px;margin:20px 0 8px}
+.ed input,.ed select{border:1.5px solid var(--line);border-radius:8px;background:var(--surface);padding:6px 8px;min-height:40px;width:100%}
+.ed td{padding:4px}
+.chg{display:grid;grid-template-columns:32px minmax(0,1fr);gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.chg input{width:22px;height:22px}
+.tag{display:inline-block;border-radius:6px;padding:0 8px;font-size:13px;font-weight:700;margin-right:6px}
+.tag.in{background:var(--ok-soft);color:var(--ok)} .tag.out{background:var(--bad-soft);color:var(--bad)} .tag.move{background:var(--act-soft);color:var(--act)} .tag.no{background:var(--warn-soft);color:var(--warn)} .tag.new{background:var(--indigo-soft);color:var(--indigo)}
+.note{background:var(--warn-soft);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;margin:8px 0}
+.st.out{opacity:.55}
+.bk{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="bar">
+    <div class="brand"><b id="brandTitle">สมุดประจำวิชา</b><span id="brandSub"></span></div>
+    <button class="bookbtn" data-books>เปลี่ยนวิชา</button>
+    <div class="save" id="save" aria-live="polite"></div>
+  </div>
+  <div class="rooms" id="rooms" role="toolbar" aria-label="เลือกห้อง"></div>
+</div>
+<main id="view"><div class="empty"><b>กำลังเปิดสมุด…</b></div></main>
+<nav class="tabs" role="tablist" id="tabs">
+  <button role="tab" data-tab="att" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 12 3 3 5-6"/></svg>เช็กชื่อ</button>
+  <button role="tab" data-tab="score"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16M7 16V9M12 16V5M17 16v-4"/></svg>งานและคะแนน</button>
+  <button role="tab" data-tab="watch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>เฝ้าระวัง</button>
+  <button role="tab" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>ช่วยเหลือ</button>
+  <button role="tab" data-tab="set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>ตั้งค่า</button>
+</nav>
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+<dialog id="cfm"><div class="dlg" id="cfmBody"></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ---------------- constants ---------------- */
+const ATTR=["รักชาติ ศาสน์ กษัตริย์","ซื่อสัตย์สุจริต","มีวินัย","ใฝ่เรียนรู้","อยู่อย่างพอเพียง","มุ่งมั่นในการทำงาน","รักความเป็นไทย","มีจิตสาธารณะ"];
+const QSUB=[4,2,1,2,2,2,3,2];
+const LEVEL_NAME=["ไม่ผ่าน","ผ่าน","ดี","ดีเยี่ยม"];
+const SLOTS={um01:"ก่อนกลางภาค (um01)",mid:"กลางภาค (midtermmark)",um02:"หลังกลางภาค (um02)",fin:"ปลายภาค (finalmark)",none:"ไม่ส่งเข้า BookMark"};
+const SLOT_FILE={um01:"um01",mid:"midtermmark",um02:"um02",fin:"finalmark"};
+const DAYS=["จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์"];
+const CODES=["ม","ส","ก","ล","ป","ข"];
+const CODE_NAME={"ม":"มา","ส":"สาย","ก":"กิจกรรม","ล":"ลากิจ","ป":"ลาป่วย","ข":"ขาด"};
+const PREFIX=/^(นางสาว|นาย|นาง|เด็กชาย|เด็กหญิง|ด\.ช\.|ด\.ญ\.|น\.ส\.)\s*/;
+const XLSX_URL="xlsx.full.min.js";
+/* old single-book structure (used only to move old data into book 1) */
+const OLD_TITLES={1:"โครงสร้างทางสังคม",2:"การจัดระเบียบทางสังคม",3:"การขัดเกลาทางสังคม",4:"การเปลี่ยนแปลงทางสังคม",5:"ปัญหาสังคมและแนวทางการพัฒนา",6:"วัฒนธรรมไทยและภูมิปัญญาไทย",7:"การเลือกรับวัฒนธรรมสากล",8:"สำรวจวัฒนธรรมท้องถิ่นชัยนาท",9:"นำเสนอแนวทางอนุรักษ์และปรับปรุงวัฒนธรรม",10:"กฎหมายแพ่ง: บุคคลและนิติกรรมสัญญา",11:"กฎหมายครอบครัวและมรดก",12:"กฎหมายอาญา",13:"กฎหมายใกล้ตัวในชีวิตประจำวัน",14:"กฎหมายระหว่างประเทศ",15:"สิทธิมนุษยชนสากลกับรัฐธรรมนูญ",16:"ประเมินสถานการณ์สิทธิมนุษยชนในไทย",17:"พลเมืองดี พลเมืองโลก พลเมืองดิจิทัล",18:"วางแผนโครงการรณรงค์พลเมืองดี",19:"ดำเนินโครงการและนำเสนอผล",20:"ปัญหาการเมืองไทยที่สำคัญ",21:"วิเคราะห์ข่าวการเมืองจากหลายแหล่ง",22:"แนวทางแก้ไขปัญหาการเมือง",23:"ความสัมพันธ์และองค์การระหว่างประเทศ",24:"จำลองการประชุมประสานประโยชน์ระหว่างประเทศ",25:"ระบอบการปกครองและหลักการประชาธิปไตย",26:"รัฐธรรมนูญ อำนาจอธิปไตย และสถาบันพระมหากษัตริย์",27:"เตรียมเวทีเสวนา",28:"เวทีเสวนาคุณค่าของระบอบประชาธิปไตยฯ",29:"การทุจริตและผลประโยชน์ทับซ้อน",30:"หลักการตรวจสอบและถ่วงดุลอำนาจ",31:"องค์กรอิสระตามรัฐธรรมนูญ",32:"สิทธิรับรู้ข้อมูลข่าวสารและการมีส่วนร่วม",33:"วางแผนโครงงาน",34:"สืบค้นข้อมูลสาธารณะ",35:"วิเคราะห์ข้อมูล",36:"จัดทำข้อเสนอแนะ",37:"นำเสนอโครงงาน",38:"สะท้อนคิดและสรุปบทเรียน"};
+const OLD_SCORED=[7,8,9,18,19,28,37];
+const OLD_SUMM=[["ใบงาน 7","ส 2.1 ม.4/5",5,"um01"],["แบบบันทึก 8","ส 2.1 ม.4/5",5,"um01"],["นำเสนอ 9","ส 2.1 ม.4/5",5,"um01"],["แผนโครงการ 18","ส 2.1 ม.4/3",5,"um01"],["ดำเนินโครงการ 19","ส 2.1 ม.4/3",5,"um01"],["นำเสนอผล 19","ส 2.1 ม.4/3",5,"um01"],["สอบกลางภาค","กลางภาค",20,"mid"],["เสวนา 28: เนื้อหา","ส 2.2 ม.4/3",5,"um02"],["เสวนา 28: เหตุผล","ส 2.2 ม.4/3",5,"um02"],["โครงงาน 37: สืบค้น","ส 2.2 ม.4/4",5,"um02"],["โครงงาน 37: นำเสนอ","ส 2.2 ม.4/4",5,"um02"],["ปลายภาค: ปรนัย","ปลายภาค",20,"fin"],["ปลายภาค: อัตนัย","ปลายภาค",10,"fin"]];
+
+/* ---------------- helpers ---------------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+const parseD=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const thD=(d,o)=>d.toLocaleDateString("th-TH",o||{weekday:"short",day:"numeric",month:"short"});
+const blank=v=>v==null||v==="";
+const normName=s=>String(s||"").replace(/\s+/g," ").trim();
+const bareName=s=>normName(s).replace(PREFIX,"");
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2200)}
+function nextMonday(){const d=new Date();d.setDate(d.getDate()+((8-d.getDay())%7||7));return iso(d)}
+
+function newConfig(o){return Object.assign({subject:"",code:"",term:"",level:"4",start:nextMonday(),holidays:[],attMin:0.8,pass:0.6,near:2,task:3,perWeek:2,
+  sessions:Array.from({length:40},(_,i)=>"คาบที่ "+(i+1)),forms:[],
+  items:[{id:"s1",name:"คะแนนก่อนกลางภาค",ind:"",max:30,bm:"um01"},{id:"s2",name:"สอบกลางภาค",ind:"กลางภาค",max:20,bm:"mid"},{id:"s3",name:"คะแนนหลังกลางภาค",ind:"",max:20,bm:"um02"},{id:"s4",name:"สอบปลายภาค",ind:"ปลายภาค",max:30,bm:"fin"}],
+  litNames:["รายการที่ 1","รายการที่ 2","รายการที่ 3","รายการที่ 4","รายการที่ 5"],seq:10},o||{})}
+const STRUCT_KEYS=["level","credits","start","holidays","attMin","pass","near","task","perWeek","sessions","forms","items","litNames","seq"];
+
+/* ---------------- state ---------------- */
+const S={books:{list:[],cur:null,tcode:"",tname:"",seq:1},bid:null,config:newConfig(),rooms:[],att:{},sc:{},logs:[],
+  ui:{room:null,tab:"att",k:null,item:null,filter:"all",scope:"room"}};
+let DB=null,UID=null,MODE="local",DL=null;
+const unsubs={};
+
+/* ---------------- storage ---------------- */
+const pending={},timers={},saving={};
+const fullName=n=>n==="books"?"books":`bk_${S.bid}_${n}`;
+function docData(n){
+  if(n==="books") return S.books;
+  if(n==="config") return S.config;
+  if(n==="rooms") return {list:S.rooms};
+  if(n==="logs") return {items:S.logs};
+  if(n.startsWith("att_")) return S.att[n.slice(4)]||{m:{}};
+  if(n.startsWith("sc_")) return S.sc[n.slice(3)]||emptySc();
+}
+const emptySc=()=>({due:{},f:{},s:{},q:{},lit:{}});
+function setSave(t,cls){const e=$("#save");e.textContent=t;e.className="save "+(cls||"")}
+const jobs={};
+function persist(n){
+  const fn=fullName(n); jobs[fn]=()=>docData(n); pending[fn]=true; setSave("กำลังบันทึก…","busy");
+  clearTimeout(timers[fn]); timers[fn]=setTimeout(()=>flush(fn),300);
+}
+/* storage: everything stays on this device (IndexedDB; localStorage fallback) */
+const KV={db:null,cache:{},ls:false};
+function idbOpen(){return new Promise((res,rej)=>{let r;try{r=indexedDB.open("classbook",1)}catch(e){rej(e);return}r.onupgradeneeded=()=>{r.result.createObjectStore("kv")};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function kvInit(){
+  try{KV.db=await idbOpen();await new Promise((res,rej)=>{const rq=KV.db.transaction("kv","readonly").objectStore("kv").openCursor();rq.onsuccess=()=>{const c=rq.result;if(c){KV.cache[c.key]=c.value;c.continue()}else res()};rq.onerror=()=>rej(rq.error)})}
+  catch(e){KV.ls=true;try{KV.cache=JSON.parse(localStorage.getItem("classbook-local")||"{}")}catch(x){KV.cache={}}}
+  try{if(navigator.storage&&navigator.storage.persist) navigator.storage.persist()}catch(e){}
+}
+function kvTx(fn){return new Promise((res,rej)=>{const tx=KV.db.transaction("kv","readwrite");fn(tx.objectStore("kv"));tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);tx.onabort=()=>rej(tx.error)})}
+async function kvPut(k,v){KV.cache[k]=v;if(KV.ls){localStorage.setItem("classbook-local",JSON.stringify(KV.cache));return}await kvTx(st=>st.put(v,k))}
+async function kvDel(k){delete KV.cache[k];if(KV.ls){localStorage.setItem("classbook-local",JSON.stringify(KV.cache));return}await kvTx(st=>st.delete(k))}
+const isSnap=k=>k.startsWith("snap:"),isMeta=k=>k==="meta";
+function allDocs(){const o={};Object.keys(KV.cache).forEach(k=>{if(!isSnap(k)&&!isMeta(k)) o[k]=KV.cache[k]});return o}
+async function writeDoc(fn,body){await kvPut(fn,body);noteChange()}
+async function readDoc(fn){const v=KV.cache[fn];return v==null?null:clone(v)}
+/* automatic daily snapshots kept on this device (last 7 days) */
+let snapBusy=false;
+async function noteChange(){
+  const day=iso(new Date()),key="snap:"+day;if(snapBusy||KV.cache[key]) return;snapBusy=true;
+  try{await kvPut(key,{at:new Date().toISOString(),docs:clone(allDocs())});
+    const old=Object.keys(KV.cache).filter(isSnap).sort().reverse().slice(7);for(const k of old) await kvDel(k)}catch(e){}
+  snapBusy=false;
+}
+const meta=()=>KV.cache.meta||{};
+async function setMeta(o){await kvPut("meta",Object.assign({},meta(),o))}
+async function flush(fn){
+  if(saving[fn]){await saving[fn].catch(()=>{});}
+  if(!pending[fn]) return;
+  const body=clone(jobs[fn]());
+  pending[fn]=false;
+  const p=(async()=>{
+    try{await writeDoc(fn,body);if(!Object.values(pending).some(Boolean)) setSave("บันทึกในเครื่องนี้แล้ว")}
+    catch(e){pending[fn]=true;setSave("บันทึกไม่สำเร็จ กำลังลองใหม่…","err");clearTimeout(timers[fn]);timers[fn]=setTimeout(()=>flush(fn),3000)}
+  })();
+  saving[fn]=p; await p; if(saving[fn]===p) saving[fn]=null;
+}
+function flushAll(){return Promise.all(Object.keys(pending).filter(k=>pending[k]).map(k=>{clearTimeout(timers[k]);return flush(k)}))}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden") flushAll()});
+window.addEventListener("pagehide",()=>{flushAll()});
+
+function applyDoc(n,d){
+  if(!d) return;
+  if(n==="config") S.config=newConfig(d);
+  else if(n==="rooms") S.rooms=d.list||[];
+  else if(n==="logs") S.logs=d.items||[];
+  else if(n.startsWith("att_")) S.att[n.slice(4)]=Object.assign({m:{}},d);
+  else if(n.startsWith("sc_")) S.sc[n.slice(3)]=Object.assign(emptySc(),d);
+}
+function watch(n){
+  if(MODE!=="db") return;
+  const fn=fullName(n); if(unsubs[fn]) return; const bid=S.bid;
+  try{unsubs[fn]=DB.doc(`data/users/${UID}/${fn}`).onSnapshot(s=>{
+    if(bid!==S.bid||!s.exists||(s.metadata&&s.metadata.hasPendingWrites)||pending[fn]||saving[fn]) return;
+    const data=clone(s.data());
+    if(n==="books"){S.books=Object.assign(S.books,data);softRender();return}
+    applyDoc(n,data); if(n==="rooms") S.rooms.forEach(r=>{ensureRoom(r);watch("att_"+r.id);watch("sc_"+r.id)}); softRender();
+  },()=>{delete unsubs[fn]})}catch(e){}
+}
+function unwatchBook(){Object.keys(unsubs).forEach(k=>{if(k!=="books"){try{unsubs[k]()}catch(e){}delete unsubs[k]}})}
+
+/* ---------------- boot / books ---------------- */
+async function boot(){
+  render();
+  await kvInit();
+  if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){try{navigator.serviceWorker.register("sw.js")}catch(e){}}
+  try{
+    const b=await readDoc("books");
+    if(b){S.books=Object.assign(S.books,b)}
+    else{
+      const old=await readOld("rooms");
+      if(old&&old.list&&old.list.length){await migrateOld(old);}
+    }
+    watch("books");
+    if(S.books.cur&&S.books.list.some(x=>x.id===S.books.cur)) await openBook(S.books.cur);
+    setSave(KV.ls?"บันทึกในเครื่องนี้ (โหมดสำรอง)":"บันทึกในเครื่องนี้");
+  }catch(e){console.error(e);setSave("เปิดข้อมูลไม่สำเร็จ ลองรีเฟรช","err")}
+  render();
+}
+async function readOld(n){
+  try{const all=JSON.parse(localStorage.getItem("classbook")||"{}");return all[n]||null}catch(e){return null}
+}
+/* move old single-book data into book b1 (old documents are left untouched) */
+async function migrateOld(oldRooms){
+  const oc=await readOld("config")||{}, ol=await readOld("logs")||{};
+  const form=[];for(let p=1;p<=38;p++) if(!OLD_SCORED.includes(p)) form.push(p);
+  const sessions=[];for(let k=1;k<=40;k++) sessions.push(k<=19?`แผนที่ ${k} ${OLD_TITLES[k]}`:k===20?"สอบกลางภาค":k<=39?`แผนที่ ${k-1} ${OLD_TITLES[k-1]}`:"สอบปลายภาค");
+  const cfg=newConfig({subject:oc.subject||"สังคมศึกษา 2",code:oc.code||"ส31103",term:oc.term||"2/2569",level:"4",start:oc.start||nextMonday(),holidays:oc.holidays||[],
+    attMin:oc.attMin??0.8,pass:oc.pass??0.6,near:oc.near??2,task:oc.task??3,perWeek:2,sessions,
+    forms:form.map((p,i)=>({id:"f"+i,name:`แผน ${p} ${OLD_TITLES[p]}`})),
+    items:OLD_SUMM.map((x,j)=>({id:"s"+j,name:x[0],ind:x[1],max:x[2],bm:x[3]})),seq:100});
+  S.bid="b1"; S.config=cfg; S.rooms=oldRooms.list.map(r=>Object.assign({},r,{students:r.students.map(s=>Object.assign({st:"in",inD:"",outD:"",why:""},s))}));
+  S.att={};S.sc={};S.logs=ol.items||[];
+  for(const r of S.rooms){
+    const a=await readOld("att_"+r.id), c=await readOld("sc_"+r.id);
+    S.att[r.id]={m:(a&&a.m)||{}};
+    const sc=emptySc(); if(c){sc.due=c.due||{};
+      Object.entries(c.f||{}).forEach(([sid,str])=>{const o={};[...str].forEach((ch,i)=>{if(ch!=="_") o["f"+i]=ch});sc.f[sid]=o});
+      Object.entries(c.s||{}).forEach(([sid,arr])=>{const o={};(arr||[]).forEach((v,j)=>{if(!blank(v)) o["s"+j]=v});sc.s[sid]=o});
+      if(c.q) sc.oldQ=c.q;}
+    S.sc[r.id]=sc;
+  }
+  S.books.list=[{id:"b1",title:bookTitle(cfg)}];S.books.cur="b1";S.books.seq=2;
+  for(const n of ["config","rooms","logs",...S.rooms.flatMap(r=>["att_"+r.id,"sc_"+r.id])]) await writeDoc(fullName(n),clone(docData(n)));
+  await writeDoc("books",clone(S.books));
+}
+const bookTitle=c=>`${c.code||"(ไม่มีรหัส)"} ${c.subject||""} ม.${c.level} ${c.term?"ภาค "+c.term:""}`.replace(/\s+/g," ").trim();
+async function openBook(bid){
+  await flushAll(); unwatchBook();
+  S.bid=bid; S.config=newConfig(); S.rooms=[]; S.att={}; S.sc={}; S.logs=[];
+  const [c,r,l]=await Promise.all(["config","rooms","logs"].map(n=>readDoc(fullName(n))));
+  applyDoc("config",c);applyDoc("rooms",r);applyDoc("logs",l);
+  const names=S.rooms.flatMap(x=>["att_"+x.id,"sc_"+x.id]);
+  const ds=await Promise.all(names.map(n=>readDoc(fullName(n))));ds.forEach((d,i)=>applyDoc(names[i],d));
+  S.rooms.forEach(ensureRoom);
+  ["config","rooms","logs",...names].forEach(watch);
+  S.ui.room=S.rooms[0]?S.rooms[0].id:null; S.ui.k=null; S.ui.item=null;
+  if(S.books.cur!==bid){S.books.cur=bid;persist("books")}
+}
+function ensureRoom(r){
+  S.att[r.id]=S.att[r.id]||{m:{}}; S.sc[r.id]=Object.assign(emptySc(),S.sc[r.id]||{});
+  const P=S.config.perWeek; r.tt=r.tt||[]; while(r.tt.length<P) r.tt.push({day:Math.min(4,r.tt.length*2),period:1,place:""});
+  r.students.forEach(s=>{if(!s.st) s.st="in"});
+}
+function softRender(){const a=document.activeElement;if(a&&a.matches("input,textarea,select")&&($("#view").contains(a)||$("#dlg").contains(a))) return; render()}
+
+/* ---------------- calendar ---------------- */
+const N=()=>S.config.sessions.length;
+const isExam=k=>/^สอบ/.test(S.config.sessions[k-1]||"");
+function sessDate(r,k){const P=S.config.perWeek,w=Math.floor((k-1)/P),slot=(k-1)%P,t=r.tt[slot]||{day:0};const d=parseD(S.config.start);d.setDate(d.getDate()+w*7+(+t.day||0));return d}
+const isHol=d=>S.config.holidays.some(h=>h.d===iso(d));
+function todaySession(r){const t=iso(new Date());let best=1;for(let k=1;k<=N();k++){const d=iso(sessDate(r,k));if(d===t) return k;if(d<=t) best=k}return best}
+const enrolledOn=(st,d)=>(!st.inD||d>=st.inD)&&(!st.outD||d<st.outD);
+
+/* ---------------- calculations ---------------- */
+const room=()=>S.rooms.find(r=>r.id===S.ui.room);
+const active=r=>r.students.filter(s=>s.st!=="out");
+function attStr(rid,sid){return (S.att[rid].m[sid]||"").padEnd(N(),"_")}
+function lastRecorded(rid){let last=0;for(const v of Object.values(S.att[rid].m)){for(let i=v.length-1;i>=0;i--){if(v[i]!=="_"){if(i+1>last) last=i+1;break}}}return last}
+const items=()=>S.config.items, forms=()=>S.config.forms;
+function qLevel(a){if(!a||a.length<8||a.some(blank)) return null;const v=a.map(Number);if(v.some(x=>x===0)) return 0;const c3=v.filter(x=>x===3).length,mn=Math.min(...v);
+  if(mn>=2&&c3>=5) return 3; if(mn>=2) return 2; if(c3>=4) return 2; return 1}
+function litLevel(a){if(!a||a.length<5||a.some(blank)) return null;const t=a.reduce((s,x)=>s+Number(x),0);return t>=13?3:t>=9?2:t>=5?1:0}
+const gradeOf=v=>v>=80?"4":v>=75?"3.5":v>=70?"3":v>=65?"2.5":v>=60?"2":v>=55?"1.5":v>=50?"1":"0";
+function slotTotals(sv){const t={um01:0,mid:0,um02:0,fin:0,none:0};items().forEach(it=>{const v=sv[it.id];if(!blank(v)) t[it.bm]=(t[it.bm]||0)+Number(v)});t.all=t.um01+t.mid+t.um02+t.fin;return t}
+function studentStats(r,st,ctx){
+  const c=S.config,a=attStr(r.id,st.sid),cnt={};CODES.forEach(x=>cnt[x]=0);let rec=0,T=0;
+  for(let k=1;k<=N();k++){const d=iso(sessDate(r,k));if(!enrolledOn(st,d)) continue;if(isHol(sessDate(r,k))) continue;T++;const ch=a[k-1];if(ch!=="_"){rec++;if(cnt[ch]!=null) cnt[ch]++}}
+  const absn=cnt["ล"]+cnt["ป"]+cnt["ข"],present=cnt["ม"]+cnt["ส"]+cnt["ก"];
+  const remain=Math.floor(T*(1-c.attMin)+1e-9)-absn;
+  let last3=0;for(let k=Math.max(1,ctx.last-2);k<=ctx.last;k++) if(a[k-1]==="ข") last3++;
+  const attStatus=remain<0?"มส":remain<=c.near?"ใกล้ มส":"ปกติ";
+  const sc=S.sc[r.id],f=sc.f[st.sid]||{},sv=sc.s[st.sid]||{};
+  let formMiss=0;forms().forEach(fm=>{const v=f[fm.id];if(v==="x"||(blank(v)&&sc.due[fm.id])) formMiss++});
+  let sumMiss=0,dueMax=0,earned=0;const missNames=[];
+  items().forEach(it=>{if(sc.due[it.id]&&it.bm!=="mid"&&it.bm!=="fin"){dueMax+=Number(it.max);const v=sv[it.id];if(blank(v)){sumMiss++;missNames.push(it.name)}else earned+=Number(v)}});
+  const pct=dueMax?earned/dueMax:null, tot=slotTotals(sv);
+  const fullMax=items().filter(it=>it.bm!=="none").reduce((t,it)=>t+Number(it.max),0)||100;
+  const finItems=items().filter(it=>it.bm==="fin"), finalDue=finItems.length>0&&finItems.every(it=>sc.due[it.id]);
+  const examMiss=items().filter(it=>(it.bm==="mid"||it.bm==="fin")&&sc.due[it.id]&&blank(sv[it.id])).length;
+  const result=!finalDue?"":attStatus==="มส"?"มส":(examMiss||sumMiss)?"ร":gradeOf(tot.all/fullMax*100);
+  const indMap={};items().forEach(it=>{if(it.ind&&it.bm!=="mid"&&it.bm!=="fin"&&it.bm!=="none"){(indMap[it.ind]=indMap[it.ind]||[]).push(it)}});
+  const inds=Object.entries(indMap).map(([n,arr])=>{let res="";if(arr.every(it=>sc.due[it.id])){if(arr.some(it=>blank(sv[it.id]))) res="ค้างงาน";else{const sm=arr.reduce((t,it)=>t+Number(sv[it.id]),0),mx=arr.reduce((t,it)=>t+Number(it.max),0);res=sm/mx>=c.pass?"ผ่าน":"ไม่ผ่าน"}}return [n,res]});
+  const help=attStatus==="มส"||last3>=3||sumMiss>=1||examMiss>=1||(pct!=null&&pct<c.pass);
+  const watchS=attStatus==="ใกล้ มส"||last3>=2||formMiss>=c.task||(pct!=null&&pct<c.pass+0.1);
+  const status=help?"ต้องช่วยเหลือ":watchS?"เฝ้าระวัง":"ปกติ";
+  const reasons=[];
+  if(attStatus==="มส") reasons.push(["bad","เวลาเรียนไม่ถึงเกณฑ์ (มส)"]);else if(attStatus==="ใกล้ มส") reasons.push(["warn",`ขาดได้อีก ${remain} คาบ`]);
+  if(last3>=2) reasons.push([last3>=3?"bad":"warn",`ขาด ${last3} ใน 3 คาบล่าสุด`]);
+  if(sumMiss) reasons.push(["bad",`ค้างงานเก็บคะแนน ${sumMiss} ชิ้น`]);
+  if(examMiss) reasons.push(["bad",`ขาดสอบ ${examMiss} รายการ`]);
+  if(formMiss) reasons.push([formMiss>=c.task?"warn":"neu",`ค้างใบงาน ${formMiss} ชิ้น`]);
+  if(pct!=null&&pct<c.pass+0.1) reasons.push([pct<c.pass?"bad":"warn",`คะแนนเก็บ ${Math.round(pct*100)}%`]);
+  if(st.inD) reasons.push(["neu",`ย้ายเข้า ${thD(parseD(st.inD),{day:"numeric",month:"short"})}`]);
+  let msg="";
+  if(status!=="ปกติ"){msg=`${r.name} เลขที่ ${st.no} ${st.name}: `;
+    if(absn) msg+=`ไม่ได้เข้าเรียน ${absn} คาบ (ขาดได้อีก ${Math.max(remain,0)} คาบ) `;
+    if(last3>=2) msg+="ขาดติดกันช่วงหลัง ";
+    if(formMiss) msg+=`ค้างใบงาน ${formMiss} ชิ้น `;
+    if(sumMiss) msg+=`ค้างงานเก็บคะแนน: ${missNames.join(", ")} `;
+    if(examMiss) msg+=`ขาดสอบ ${examMiss} รายการ `;
+    if(pct!=null&&pct<c.pass) msg+=`คะแนนเก็บ ${Math.round(pct*100)}% ต่ำกว่าเกณฑ์ `;
+    msg=msg.trim()}
+  const q=sc.q[st.sid],l=sc.lit[st.sid];
+  return {cnt,rec,T,present,absn,remain,last3,attStatus,formMiss,sumMiss,examMiss,pct,tot,fullMax,result,inds,status,reasons,msg,pctAtt:rec?present/rec:null,qL:qLevel(q),lL:litLevel(l)};
+}
+const roomCtx=r=>({last:lastRecorded(r.id)});
+
+/* ---------------- render ---------------- */
+function render(){
+  const c=S.config,has=!!S.bid;
+  $("#brandTitle").textContent=has?`${c.subject||"(ยังไม่ตั้งชื่อวิชา)"} ${c.code}`:"สมุดประจำวิชา";
+  $("#brandSub").textContent=has?`ม.${c.level} ภาคเรียนที่ ${c.term}`:"ยังไม่มีสมุด";
+  $("#rooms").innerHTML=S.rooms.map(r=>`<button class="room" data-room="${r.id}" aria-pressed="${r.id===S.ui.room}">${esc(r.name)}<small>${active(r).length} คน</small></button>`).join("");
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===S.ui.tab));
+  const v=$("#view");
+  if(!has){v.innerHTML=`<div class="empty"><b>ยังไม่มีสมุดประจำวิชา</b>สร้างสมุดของรายวิชาแรก แล้วนำเข้ารายชื่อจากไฟล์ BookMark หรือใบรายชื่อ<br>ข้อมูลทั้งหมดเก็บในเครื่องนี้เท่านั้น<br><br><button class="btn primary" data-newbook>สร้างสมุดใหม่</button><br><br>
+   <label class="btn" style="display:inline-flex;align-items:center">ย้ายข้อมูลจากเครื่องเดิม (ไฟล์สำรองทุกวิชา)<input type="file" accept=".json,application/json" data-restoreall hidden></label><br><br>
+   <label class="btn" style="display:inline-flex;align-items:center">นำเข้าสมุดจากไฟล์สำรองรายวิชา<input type="file" accept=".json,application/json" data-importbook hidden></label></div>`;return}
+  if(S.ui.room&&!room()) S.ui.room=S.rooms[0]?S.rooms[0].id:null;
+  if(!S.rooms.length&&S.ui.tab!=="set"){v.innerHTML=`<div class="empty"><b>สมุดนี้ยังไม่มีรายชื่อนักเรียน</b>ไปที่แท็บตั้งค่า หัวข้อ “รายชื่อนักเรียน” แล้วนำเข้าไฟล์<br><br><button class="btn primary" data-go="set">ไปที่ตั้งค่า</button></div>`;return}
+  ({att:renderAtt,score:renderScore,watch:renderWatch,log:renderLog,set:renderSet})[S.ui.tab](v);
+  const lb=meta().lastBackup,ds=daysSince(lb);
+  if(S.rooms.length&&(ds==null||ds>=7)) v.insertAdjacentHTML("afterbegin",`<div class="banner hol" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span>${ds==null?"ยังไม่เคยสำรองข้อมูลไว้นอกเครื่อง":`ไม่ได้สำรองข้อมูลมา ${ds} วัน`} ถ้าเครื่องหายหรือเสีย ข้อมูลจะหาย</span><button class="btn small" data-backupall>สำรองเลย</button></div>`);
+}
+function renderAtt(v){
+  const r=room();if(S.ui.k==null||S.ui.k>N()) S.ui.k=todaySession(r);
+  const k=S.ui.k,d=sessDate(r,k),di=iso(d),hol=isHol(d),ctx=roomCtx(r),today=iso(new Date());
+  const anyRec=kk=>Object.values(S.att[r.id].m).some(x=>x[kk-1]&&x[kk-1]!=="_");
+  let strip="";for(let x=1;x<=N();x++){const dd=sessDate(r,x);const cls=[isHol(dd)?"hol":"",anyRec(x)?"done":"",isExam(x)?"exam":"",iso(dd)===today?"today":""].join(" ");
+    strip+=`<button class="sess ${cls}" data-k="${x}" aria-pressed="${x===k}" aria-label="คาบที่ ${x}"><b>${x}</b>${thD(dd,{day:"numeric",month:"short"})}</button>`}
+  const P=S.config.perWeek,tt=r.tt[(k-1)%P]||{};
+  const list=r.students.filter(st=>enrolledOn(st,di));
+  const rows=list.map(st=>{
+    const a=attStr(r.id,st.sid)[k-1],ss=studentStats(r,st,ctx);
+    const pill=ss.attStatus==="มส"?`<span class="pill bad">มส</span>`:ss.attStatus==="ใกล้ มส"?`<span class="pill warn">ขาดได้อีก ${ss.remain}</span>`:`<span class="muted">ขาดได้อีก ${ss.remain}</span>`;
+    return `<div class="st"><div class="no">${st.no}</div><div class="nm"><b data-stu="${esc(st.sid)}">${esc(st.name)}</b><span>${pill}${st.inD?` <span class="pill neu">ย้ายเข้า</span>`:""}</span></div>
+     <div class="stamps">${CODES.map(cd=>`<button class="stamp c-${cd}" ${hol?"disabled":""} data-mark="${cd}" data-sid="${esc(st.sid)}" aria-pressed="${a===cd}" aria-label="${CODE_NAME[cd]}">${cd}</button>`).join("")}</div></div>`}).join("");
+  const filled=list.filter(st=>attStr(r.id,st.sid)[k-1]!=="_").length;
+  v.innerHTML=`<div class="strip" id="strip">${strip}</div>
+   <div class="info"><div><div class="when">คาบที่ ${k} ${thD(d,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div>
+   <div class="what">${esc(S.config.sessions[k-1])}<br>คาบ ${esc(tt.period??"")} ห้อง ${esc(tt.place||"")}  บันทึกแล้ว ${filled}/${list.length} คน</div></div>
+   <div class="row"><button class="btn" data-k="${Math.max(1,k-1)}" aria-label="คาบก่อนหน้า">‹</button><button class="btn" data-k="${Math.min(N(),k+1)}" aria-label="คาบถัดไป">›</button></div></div>
+   ${hol?`<div class="banner hol">ตรงกับวันหยุด ไม่นับเป็นเวลาเรียน</div>`:""}${isExam(k)?`<div class="banner exam">${esc(S.config.sessions[k-1])}: เช็กชื่อผู้เข้าสอบได้ตามปกติ</div>`:""}
+   ${hol?"":`<div class="row" style="margin-bottom:10px"><button class="btn primary" data-allpresent>ทุกคนที่ยังว่าง = มา</button><button class="btn ghost" data-clearsess>ล้างคาบนี้</button></div>`}
+   <div class="list">${rows||`<div class="empty"><b>ไม่มีนักเรียนในคาบนี้</b></div>`}</div>`;
+  const sel=$("#strip [aria-pressed=true]");if(sel&&sel.scrollIntoView) sel.scrollIntoView({inline:"center",block:"nearest"});
+}
+function curItem(){
+  const it=S.ui.item;
+  if(it){const [t,id]=it.split(":");if(t==="f"&&forms().some(x=>x.id===id)) return it;if(t==="s"&&items().some(x=>x.id===id)) return it;if(t==="q"&&+id<8) return it;if(t==="l"&&+id<5) return it}
+  return forms().length?"f:"+forms()[0].id:items().length?"s:"+items()[0].id:"q:0";
+}
+function renderScore(v){
+  const r=room(),sc=S.sc[r.id],it=S.ui.item=curItem(),[type,id]=it.split(":");
+  const chip=(key,label,due)=>`<button class="item ${due?"due":""}" data-item="${key}" aria-pressed="${key===it}">${esc(label)}</button>`;
+  const list=active(r);
+  let title="",rows="",extra="";
+  if(type==="f"){const fm=forms().find(x=>x.id===id);title=`ใบงาน: ${fm.name}`;
+    rows=list.map(st=>{const val=(sc.f[st.sid]||{})[id]||"";const miss=sc.due[id]&&!val;
+      return `<div class="st"><div class="no">${st.no}</div><div class="nm"><b data-stu="${esc(st.sid)}">${esc(st.name)}</b><span>${miss?`<span class="pill bad">ยังไม่ส่ง</span>`:val==="x"?`<span class="pill bad">ไม่ส่ง</span>`:val==="ล"?`<span class="pill warn">ส่งช้า</span>`:val==="✓"?`<span class="pill ok">ส่งแล้ว</span>`:""}</span></div>
+       <div class="stamps">${["✓","ล","x"].map(cd=>`<button class="stamp c-${cd}" data-fmark="${cd}" data-sid="${esc(st.sid)}" aria-pressed="${val===cd}" aria-label="${cd==="✓"?"ส่ง":cd==="ล"?"ส่งช้า":"ไม่ส่ง"}">${cd}</button>`).join("")}</div></div>`}).join("");
+    extra=`<div class="row" style="margin-top:8px"><button class="btn small" data-fall="✓">ทุกคนที่ยังว่าง = ส่ง</button></div>`}
+  else if(type==="s"){const m=items().find(x=>x.id===id);title=`${m.name}${m.ind?` (${m.ind})`:""} คะแนนเต็ม ${m.max}  ส่งเข้า ${SLOTS[m.bm]}`;
+    rows=list.map(st=>{const val=(sc.s[st.sid]||{})[id];const miss=sc.due[id]&&blank(val);
+      return `<div class="st"><div class="no">${st.no}</div><div class="nm"><b data-stu="${esc(st.sid)}">${esc(st.name)}</b><span class="muted">${miss?`<span class="pill bad">ค้าง</span>`:""}</span></div>
+       <input class="num ${miss?"missing":""}" type="number" inputmode="decimal" min="0" max="${m.max}" step="0.5" value="${blank(val)?"":val}" data-score="${esc(st.sid)}" aria-label="คะแนน ${esc(st.name)}"></div>`}).join("")}
+  else{const isQ=type==="q",n=+id,key=isQ?"q":"lit",cnt=isQ?8:5;
+    title=isQ?`คุณลักษณะอันพึงประสงค์ ข้อ ${n+1} ${ATTR[n]}`:`อ่าน คิดวิเคราะห์ และเขียน: ${S.config.litNames[n]}`;
+    rows=list.map(st=>{const arr=sc[key][st.sid]||[],val=arr[n],lv=isQ?qLevel(arr):litLevel(arr);
+      return `<div class="st"><div class="no">${st.no}</div><div class="nm"><b data-stu="${esc(st.sid)}">${esc(st.name)}</b><span>${lv==null?`<span class="muted">สรุป: ยังไม่ครบ ${arr.filter(x=>!blank(x)).length}/${cnt}</span>`:`<span class="pill ${lv>=2?"ok":lv===1?"warn":"bad"}">สรุป ${LEVEL_NAME[lv]} (${lv})</span>`}</span></div>
+       <div class="stamps">${[3,2,1,0].map(x=>`<button class="stamp c-${x>=2?"✓":x===1?"ล":"x"}" data-rate="${x}" data-sid="${esc(st.sid)}" aria-pressed="${!blank(val)&&+val===x}" aria-label="ระดับ ${x}">${x}</button>`).join("")}</div></div>`}).join("");
+    extra=`<div class="row" style="margin-top:8px"><button class="btn small" data-rall="3">ทุกคนที่ยังว่าง = 3</button><button class="btn small" data-rall="2">ทุกคนที่ยังว่าง = 2</button></div>`}
+  const due=!!sc.due[id]&&type!=="q"&&type!=="l";
+  v.innerHTML=`<h2>งานและคะแนน ${esc(r.name)}</h2><p class="sub">แตะเลือกรายการ ขอบสีส้ม = ถึงกำหนดแล้ว</p>
+   ${forms().length?`<div class="group-label">ใบงานระหว่างทาง (ไม่คิดคะแนน)</div><div class="items">${forms().map(x=>chip("f:"+x.id,x.name.length>14?x.name.slice(0,14)+"…":x.name,sc.due[x.id])).join("")}</div>`:""}
+   <div class="group-label">คะแนนเก็บและคะแนนสอบ</div><div class="items">${items().map(x=>chip("s:"+x.id,x.name,sc.due[x.id])).join("")||`<span class="muted">ยังไม่มีรายการ เพิ่มได้ที่แท็บตั้งค่า</span>`}</div>
+   <div class="group-label">คุณลักษณะอันพึงประสงค์ 8 ประการ (0–3)</div><div class="items">${ATTR.map((x,i)=>chip("q:"+i,`${i+1}. ${x}`,false)).join("")}</div>
+   <div class="group-label">อ่าน คิดวิเคราะห์ และเขียน (0–3)</div><div class="items">${S.config.litNames.map((x,i)=>chip("l:"+i,x,false)).join("")}</div>
+   <div class="panel" style="margin:10px 0"><div class="row" style="justify-content:space-between"><b>${esc(title)}</b>
+   ${type==="f"||type==="s"?`<label class="switch"><input type="checkbox" data-due="${id}" ${due?"checked":""}> ถึงกำหนดแล้ว</label>`:""}</div>
+   ${type==="f"||type==="s"?`<div class="muted" style="font-size:14px">เมื่อเปิด “ถึงกำหนดแล้ว” ช่องที่ยังว่างจะนับเป็นงานค้าง และเข้าสู่ระบบเฝ้าระวัง</div>`:`<div class="muted" style="font-size:14px">3 = ดีเยี่ยม 2 = ดี 1 = ผ่าน 0 = ไม่ผ่าน แอปสรุประดับเมื่อประเมินครบทุกข้อ</div>`}
+   ${extra}</div><div class="list">${rows}</div>`;
+}
+function allStats(scope){const out=[];(scope==="all"?S.rooms:[room()]).forEach(r=>{const ctx=roomCtx(r);active(r).forEach(st=>out.push({r,st,s:studentStats(r,st,ctx)}))});return out}
+function renderWatch(v){
+  const list=allStats(S.ui.scope),n=x=>list.filter(o=>o.s.status===x).length,rank=x=>x==="ต้องช่วยเหลือ"?0:x==="เฝ้าระวัง"?1:2;
+  const f=S.ui.filter,shown=list.filter(o=>f==="all"||o.s.status===f).sort((a,b)=>rank(a.s.status)-rank(b.s.status)||roomNum(a.r)-roomNum(b.r)||a.st.no-b.st.no);
+  const cls=x=>x==="ต้องช่วยเหลือ"?"bad":x==="เฝ้าระวัง"?"warn":"ok";
+  v.innerHTML=`<div class="row" style="justify-content:space-between;margin-bottom:8px"><div><h2>เฝ้าระวังผู้เรียน</h2><p class="sub">${S.ui.scope==="all"?"ทุกห้อง":esc(room().name)}  คัดกรองจากเวลาเรียน งานค้าง และคะแนนเก็บที่ถึงกำหนด</p></div>
+   <button class="btn small" data-scope="${S.ui.scope==="all"?"room":"all"}">${S.ui.scope==="all"?"ดูเฉพาะห้องนี้":"ดูทุกห้อง"}</button></div>
+   <div class="counts">
+    <button class="count bad" data-filter="ต้องช่วยเหลือ" aria-pressed="${f==="ต้องช่วยเหลือ"}"><b>${n("ต้องช่วยเหลือ")}</b><span>ต้องช่วยเหลือ</span></button>
+    <button class="count warn" data-filter="เฝ้าระวัง" aria-pressed="${f==="เฝ้าระวัง"}"><b>${n("เฝ้าระวัง")}</b><span>เฝ้าระวัง</span></button>
+    <button class="count ok" data-filter="ปกติ" aria-pressed="${f==="ปกติ"}"><b>${n("ปกติ")}</b><span>ปกติ</span></button>
+    <button class="count" data-filter="all" aria-pressed="${f==="all"}"><b>${list.length}</b><span>ทั้งหมด</span></button></div>
+   <div class="row" style="margin-bottom:10px"><button class="btn primary" data-copyall>คัดลอกข้อความแจ้งเตือนที่แสดง</button></div>
+   <div class="list">${shown.map(o=>`<div class="alert ${cls(o.s.status)}"><div class="who" data-stu="${esc(o.st.sid)}" data-r="${o.r.id}">${esc(o.r.name)} เลขที่ ${o.st.no} ${esc(o.st.name)}</div>
+     <div class="row">${o.s.msg?`<button class="btn small" data-copy="${esc(o.s.msg)}">คัดลอก</button>`:""}<button class="btn small" data-newlog="${esc(o.st.sid)}" data-r="${o.r.id}">บันทึกช่วยเหลือ</button></div>
+     <div class="reasons">${o.s.reasons.length?o.s.reasons.map(x=>`<span class="pill ${x[0]}">${esc(x[1])}</span>`).join(""):`<span class="pill ok">ปกติ</span>`}${o.s.pctAtt!=null?`<span class="pill neu">มาเรียน ${Math.round(o.s.pctAtt*100)}%</span>`:""}</div></div>`).join("")||`<div class="empty"><b>ไม่มีนักเรียนในกลุ่มนี้</b></div>`}</div>`;
+}
+function renderLog(v){
+  const r=room(),its=S.logs.filter(l=>l.room===r.id).sort((a,b)=>b.date.localeCompare(a.date));
+  const name=sid=>(r.students.find(s=>s.sid===sid)||{}).name||sid;
+  v.innerHTML=`<div class="row" style="justify-content:space-between"><div><h2>บันทึกการช่วยเหลือ ${esc(r.name)}</h2><p class="sub">รู้จักนักเรียน คัดกรอง ส่งเสริม ป้องกันและแก้ไข ส่งต่อ แล้วติดตามผล</p></div>
+   <button class="btn primary" data-newlog="">เพิ่มบันทึก</button></div>
+   <div class="list">${its.map(l=>`<div class="alert ${l.result==="แย่ลง"?"bad":l.result==="ดีขึ้น"||l.result==="ยุติ"?"ok":"warn"}">
+     <div class="who" data-stu="${esc(l.sid)}">${thD(parseD(l.date),{day:"numeric",month:"short",year:"2-digit"})}  ${esc(name(l.sid))}</div>
+     <div class="row"><button class="btn small" data-editlog="${l.id}">แก้ไข</button></div>
+     <div class="reasons"><span class="pill neu">${esc(l.issue)}</span><span class="pill neu">${esc(l.action)}</span>${l.result?`<span class="pill ${l.result==="แย่ลง"?"bad":"ok"}">${esc(l.result)}</span>`:""}${l.follow?`<span class="pill warn">นัดติดตาม ${thD(parseD(l.follow),{day:"numeric",month:"short"})}</span>`:""}</div>
+     ${l.detail?`<div class="msg">${esc(l.detail)}</div>`:""}</div>`).join("")||`<div class="empty"><b>ยังไม่มีบันทึกของห้องนี้</b>เพิ่มจากปุ่มด้านบน หรือจากแท็บเฝ้าระวัง</div>`}</div>`;
+}
+const roomNum=r=>+String(r.id).split("-")[1]||0;
+function renderSet(v){
+  const c=S.config,B=S.books;
+  const slotSum={};items().forEach(it=>{slotSum[it.bm]=(slotSum[it.bm]||0)+Number(it.max)});
+  const outs=[];S.rooms.forEach(r=>r.students.forEach(s=>{if(s.st==="out") outs.push([r,s])}));
+  const ins=[];S.rooms.forEach(r=>r.students.forEach(s=>{if(s.st!=="out"&&s.inD) ins.push([r,s])}));
+  v.innerHTML=`<h2>ตั้งค่าสมุด</h2><p class="sub">${esc(bookTitle(c))}  ข้อมูลเก็บในเครื่องนี้เท่านั้น ไม่ส่งไปที่ใด</p>
+  <h3 class="sec">ข้อมูลรายวิชา</h3>
+  <div class="panel"><div class="grid2">
+   <label class="f">ชื่อรายวิชา<input data-cfg="subject" value="${esc(c.subject)}"></label>
+   <label class="f">รหัสวิชา (ใช้ตั้งชื่อไฟล์ BookMark)<input data-cfg="code" value="${esc(c.code)}"></label>
+   <label class="f">ภาคเรียน/ปีการศึกษา<input data-cfg="term" value="${esc(c.term)}" placeholder="2/2569"></label>
+   <label class="f">ระดับชั้น ม.<input data-cfg="level" value="${esc(c.level)}" placeholder="4"></label>
+   <label class="f">วันจันทร์ของสัปดาห์ที่ 1<input type="date" data-cfg="start" value="${c.start}"></label>
+   <label class="f">หน่วยกิต (1 หน่วยกิต = 40 ชม./ภาค)<input type="number" min="0.5" step="0.5" inputmode="decimal" data-credits value="${c.credits??""}" placeholder="เช่น 0.5, 1.0, 1.5"></label>
+   <label class="f">คาบต่อสัปดาห์${c.credits?` <span style="font-weight:400">(คิดจากหน่วยกิต)</span>`:""}<input type="number" min="1" max="5" data-cfgn="perWeek" value="${c.perWeek}"></label>
+   <label class="f">เกณฑ์เวลาเรียน (%)<input type="number" data-cfgp="attMin" value="${Math.round(c.attMin*100)}"></label>
+   <label class="f">เกณฑ์ผ่านคะแนนเก็บ/ตัวชี้วัด (%)<input type="number" data-cfgp="pass" value="${Math.round(c.pass*100)}"></label>
+   <label class="f">เตือน “ใกล้ มส” เมื่อขาดได้อีกไม่เกิน (คาบ)<input type="number" data-cfgn="near" value="${c.near}"></label>
+   <label class="f">เตือนเมื่อค้างใบงานตั้งแต่ (ชิ้น)<input type="number" data-cfgn="task" value="${c.task}"></label></div></div>
+  <h3 class="sec">ครูผู้สอน (ใช้ทุกวิชา)</h3>
+  <div class="panel"><div class="grid2"><label class="f">รหัสครูใน BookMark<input data-bk="tcode" value="${esc(B.tcode)}" placeholder="เช่น 442"></label>
+   <label class="f">ชื่อครูตามหัวไฟล์ BookMark<input data-bk="tname" value="${esc(B.tname)}" placeholder="นายชื่อ  นามสกุล"></label></div>
+   <p class="muted" style="font-size:14px;margin:8px 0 0">หัวไฟล์ BookMark เดิมเว้นวรรค 2 ช่องระหว่างชื่อกับนามสกุล</p></div>
+  <h3 class="sec">คาบเรียนทั้งภาค (${N()} คาบ)</h3>
+  <div class="panel"><p class="muted" style="font-size:14px;margin-top:0">บรรทัดละ 1 คาบ ตามลำดับ บรรทัดที่ขึ้นต้นด้วยคำว่า “สอบ” เป็นคาบสอบ  แก้ชื่อได้ตลอด แต่การแทรกหรือลบบรรทัดกลางรายการหลังเริ่มเช็กชื่อแล้ว จะทำให้การเช็กชื่อเลื่อนไปอยู่คาบอื่น</p>
+   <div class="row" style="margin-bottom:8px"><label class="btn" style="display:inline-flex;align-items:center">นำเข้าจากไฟล์ วก.15 (.docx)<input type="file" accept=".docx" data-vk15s hidden></label>${c.credits&&Math.round(c.credits*40)!==N()?`<span class="pill bad">${c.credits} หน่วยกิต ควรมี ${Math.round(c.credits*40)} คาบ</span>`:""}</div>
+   <textarea class="out" style="background:var(--surface);min-height:220px" data-sessions>${esc(c.sessions.join("\n"))}</textarea></div>
+  <h3 class="sec">นำเข้าโครงสร้างรายวิชา (ใบงานและคะแนน)</h3>
+  <div class="panel"><p class="muted" style="font-size:14px;margin-top:0">ใช้ตอนสร้างสมุดวิชาใหม่ แทนการกด “เพิ่ม” ทีละรายการ ทุกวิธีจะแสดงรายการให้ตรวจและแก้ก่อนบันทึก</p>
+   <div class="row"><label class="btn primary" style="display:inline-flex;align-items:center">นำเข้าจากไฟล์ วก.15 (.docx)<input type="file" accept=".docx" data-vk15 hidden></label></div>
+   <p class="muted" style="font-size:14px">อ่านตารางในหัวข้อ “ก่อนสอบกลางภาค / สอบกลางภาค / หลังกลางภาค / ปลายภาค” ตามแบบฟอร์ม วก.15 ของโรงเรียน ไฟล์ .doc ให้บันทึกเป็น .docx ก่อน</p>
+   <details style="margin-top:6px"><summary style="font-weight:600;cursor:pointer">วางรายการคะแนนจาก Excel หรือ Word</summary>
+    <p class="muted" style="font-size:14px">บรรทัดละ 1 รายการ 4 ช่อง คั่นด้วย Tab (คัดลอกจากตาราง Excel ได้เลย):<br>ชื่องาน | ตัวชี้วัด | คะแนนเต็ม | ช่วง (ก่อนกลางภาค / กลางภาค / หลังกลางภาค / ปลายภาค)</p>
+    <textarea id="psItems" class="out" style="background:var(--surface);min-height:120px" placeholder="ใบงาน 7&#9;ส 2.1 ม.4/5&#9;5&#9;ก่อนกลางภาค"></textarea>
+    <div class="row" style="margin-top:8px"><button class="btn" data-psitems>ตรวจรายการคะแนน</button></div></details>
+   <details style="margin-top:6px"><summary style="font-weight:600;cursor:pointer">วางรายชื่อใบงานระหว่างทาง</summary>
+    <p class="muted" style="font-size:14px">บรรทัดละ 1 ใบงาน</p>
+    <textarea id="psForms" class="out" style="background:var(--surface);min-height:120px"></textarea>
+    <div class="row" style="margin-top:8px"><button class="btn" data-psforms>ตรวจรายชื่อใบงาน</button></div></details></div>
+  <h3 class="sec">ใบงานระหว่างทาง (ไม่คิดคะแนน)</h3>
+  <div class="panel tw ed"><table><tr><th>ชื่อใบงาน</th><th></th></tr>${forms().map(x=>`<tr><td><input data-fname="${x.id}" value="${esc(x.name)}"></td><td style="width:70px"><button class="btn small" data-delform="${x.id}">ลบ</button></td></tr>`).join("")}</table>
+   <button class="btn" style="margin-top:8px" data-addform>เพิ่มใบงาน</button></div>
+  <h3 class="sec">คะแนนเก็บและคะแนนสอบ</h3>
+  <div class="panel tw ed"><table><tr><th>ชื่องาน</th><th>มาตรฐานการเรียนรู้/ตัวชี้วัด</th><th>เต็ม</th><th>ส่งเข้า BookMark ช่อง</th><th></th></tr>
+   ${items().map(x=>`<tr><td><input data-iname="${x.id}" value="${esc(x.name)}"></td><td><input data-iind="${x.id}" value="${esc(x.ind)}"></td><td style="width:80px"><input type="number" min="0" data-imax="${x.id}" value="${x.max}"></td>
+   <td><select data-ibm="${x.id}">${Object.entries(SLOTS).map(([k,t])=>`<option value="${k}" ${x.bm===k?"selected":""}>${t}</option>`).join("")}</select></td><td style="width:70px"><button class="btn small" data-delitem="${x.id}">ลบ</button></td></tr>`).join("")}</table>
+   <button class="btn" style="margin-top:8px" data-additem>เพิ่มรายการคะแนน</button>
+   <p style="margin:10px 0 0;font-size:15px">รวมคะแนนเต็ม: ${["um01","mid","um02","fin"].map(k=>`${SLOTS[k].split(" (")[0]} <b>${slotSum[k]||0}</b>`).join("  ")}  รวม <b>${["um01","mid","um02","fin"].reduce((t,k)=>t+(slotSum[k]||0),0)}</b></p></div>
+  <h3 class="sec">ชื่อรายการ อ่าน คิดวิเคราะห์ และเขียน</h3>
+  <div class="panel ed"><div class="grid2">${c.litNames.map((x,i)=>`<label class="f">คะแนน${i+1}<input data-lit="${i}" value="${esc(x)}"></label>`).join("")}</div></div>
+  <h3 class="sec">วันหยุด</h3>
+  <div class="panel"><div class="list">${c.holidays.slice().sort((a,b)=>a.d.localeCompare(b.d)).map(h=>`<div class="row" style="justify-content:space-between"><span>${thD(parseD(h.d),{weekday:"short",day:"numeric",month:"short",year:"numeric"})}  ${esc(h.n)}</span><button class="btn small" data-delhol="${h.d}">ลบ</button></div>`).join("")||`<span class="muted">ยังไม่มีวันหยุด</span>`}</div>
+   <div class="row" style="margin-top:10px"><label class="f">วันที่<input type="date" id="holD"></label><label class="f" style="flex:1">รายการ<input id="holN" placeholder="เช่น วันชดเชย กีฬาสี"></label><button class="btn" data-addhol style="align-self:end">เพิ่มวันหยุด</button></div></div>
+  <h3 class="sec">ตารางสอน</h3>
+  <div class="panel tw ed">${S.rooms.length?`<table><tr><th>ห้อง</th>${Array.from({length:c.perWeek},(_,i)=>`<th>วัน (คาบที่ ${i+1} ของสัปดาห์)</th><th>คาบ</th><th>ห้องเรียน</th>`).join("")}</tr>
+   ${S.rooms.map(r=>`<tr><td><b>${esc(r.name)}</b></td>${r.tt.slice(0,c.perWeek).map((t,i)=>`<td><select data-tt="${r.id}:${i}:day">${DAYS.map((d,di)=>`<option value="${di}" ${+t.day===di?"selected":""}>${d}</option>`).join("")}</select></td><td style="width:70px"><input type="number" data-tt="${r.id}:${i}:period" value="${esc(t.period)}"></td><td style="width:90px"><input data-tt="${r.id}:${i}:place" value="${esc(t.place)}"></td>`).join("")}</tr>`).join("")}</table>`:`<span class="muted">นำเข้ารายชื่อก่อน แล้วตารางของแต่ละห้องจะปรากฏที่นี่</span>`}</div>
+  <h3 class="sec">รายชื่อนักเรียน</h3>
+  <div class="panel"><p class="muted" style="font-size:14px;margin-top:0">นำเข้าได้จากไฟล์ที่ส่งออกจาก BookMark (.xlsx) ไฟล์ใบรายชื่อจากงานทะเบียน (.xls/.xlsx) หรือวางจาก Excel  นำเข้าซ้ำได้ทุกเมื่อ แอปจะเทียบกับรายชื่อเดิมแล้วแสดงคนย้ายเข้า ย้ายออก ย้ายห้อง และเปลี่ยนเลขที่ ให้ยืนยันก่อน</p>
+   <div class="row"><label class="btn primary" style="display:inline-flex;align-items:center">เลือกไฟล์รายชื่อ<input type="file" accept=".xlsx,.xls,.csv" data-rosterfile hidden></label></div>
+   <details style="margin-top:10px"><summary style="font-weight:600;cursor:pointer">วางรายชื่อจาก Excel</summary>
+    <p class="muted" style="font-size:14px">บรรทัดละคน: เลขที่ [Tab] เลขประจำตัว [Tab] ชื่อ–สกุล  (ระบุห้องด้านล่าง หรือมีบรรทัด “ม.4/2” คั่นแต่ละห้อง)</p>
+    <div class="grid2"><label class="f">ห้อง (ถ้าในข้อความไม่มี)<input id="impRoom" placeholder="4/2"></label></div>
+    <label class="f" style="margin-top:8px">รายชื่อ<textarea id="impText" rows="5"></textarea></label>
+    <div class="row" style="margin-top:8px"><button class="btn" data-pasteimport>ตรวจรายชื่อ</button></div></details>
+   <details style="margin-top:10px"><summary style="font-weight:600;cursor:pointer">เพิ่มนักเรียนย้ายเข้าทีละคน</summary>
+    <div class="grid2" style="margin-top:8px"><label class="f">ห้อง<select id="addRoom">${S.rooms.map(r=>`<option value="${r.id}">${esc(r.name)}</option>`).join("")}</select></label>
+     <label class="f">เลขที่<input id="addNo" type="number"></label><label class="f">เลขประจำตัว<input id="addSid"></label><label class="f">ชื่อ–สกุล<input id="addName"></label>
+     <label class="f">วันที่ย้ายเข้า<input id="addDate" type="date" value="${iso(new Date())}"></label></div>
+    <div class="row" style="margin-top:8px"><button class="btn" data-addstu>เพิ่มนักเรียน</button></div></details>
+   ${ins.length?`<div class="group-label" style="margin-top:12px">ย้ายเข้าระหว่างภาค (${ins.length})</div>${ins.map(([r,s])=>`<div class="muted" style="font-size:15px" data-stu="${esc(s.sid)}" data-r="${r.id}">${esc(r.name)} เลขที่ ${s.no} ${esc(s.name)}  ย้ายเข้า ${thD(parseD(s.inD),{day:"numeric",month:"short",year:"2-digit"})}</div>`).join("")}`:""}
+   ${outs.length?`<div class="group-label" style="margin-top:12px">ย้ายออก (${outs.length}) ข้อมูลเดิมยังเก็บไว้ ไม่ส่งออกไป BookMark</div>${outs.map(([r,s])=>`<div class="muted" style="font-size:15px" data-stu="${esc(s.sid)}" data-r="${r.id}">${esc(r.name)} เลขที่ ${s.no} ${esc(s.name)}  ออก ${s.outD?thD(parseD(s.outD),{day:"numeric",month:"short",year:"2-digit"}):""} ${esc(s.why||"")}</div>`).join("")}`:""}</div>
+  <h3 class="sec">สำรองข้อมูล</h3>
+  <div class="panel"><p style="margin-top:0">ข้อมูลทุกวิชาเก็บอยู่ในเครื่องนี้เท่านั้น  สำรองล่าสุด: <b>${meta().lastBackup?thD(new Date(meta().lastBackup),{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"ยังไม่เคยสำรอง"}</b></p>
+   <div class="row"><button class="btn primary" data-backupall>สำรองข้อมูลทุกวิชา</button><label class="btn" style="display:inline-flex;align-items:center">กู้คืนข้อมูลทุกวิชาจากไฟล์<input type="file" accept=".json,application/json" data-restoreall hidden></label></div>
+   <p class="muted" style="font-size:14px">บน iPad/มือถือ จะมีหน้าต่างให้เลือกที่เก็บ: เลือก “บันทึกไปยังไฟล์” แล้วเลือก iCloud Drive หรือ Google Drive (บัญชี @chainatpit.ac.th) หรือเลือกแอป Google Drive โดยตรง  ไฟล์นี้ใช้ย้ายข้อมูลไปเครื่องใหม่ได้</p>
+   <div class="group-label">สำรองอัตโนมัติในเครื่อง (วันละ 1 ชุด เก็บ 7 วันล่าสุด)</div>
+   ${Object.keys(KV.cache).filter(isSnap).sort().reverse().map(k=>`<div class="row" style="justify-content:space-between"><span>${thD(parseD(k.slice(5,15)),{weekday:"short",day:"numeric",month:"short",year:"numeric"})}</span><button class="btn small" data-snap="${k}">ย้อนกลับไปข้อมูลวันนี้</button></div>`).join("")||`<span class="muted">ยังไม่มี</span>`}
+   <p class="muted" style="font-size:14px">ใช้ย้อนกลับเมื่อกรอกผิด แต่ถ้าเครื่องหาย เสีย หรือลบแอป สำเนานี้หายไปด้วย จึงต้องสำรองไฟล์ไว้นอกเครื่องด้วย</p></div>
+  <h3 class="sec">ส่งออก</h3>
+  <div class="panel"><div class="row">
+   <button class="btn primary" data-bmdlg>ไฟล์สำหรับนำเข้า BookMark</button>
+   <button class="btn" data-export="csv">สรุปคะแนน CSV</button>
+   <button class="btn" data-export="att">เวลาเรียน CSV</button>
+   <button class="btn" data-export="json">ส่งออกสมุดนี้ (ไฟล์สำรองรายวิชา)</button>
+   <label class="btn" style="display:inline-flex;align-items:center">กู้คืนสมุดนี้จากไฟล์สำรองรายวิชา<input type="file" accept=".json,application/json" data-restore hidden></label></div></div>
+  <h3 class="sec">สมุดเล่มอื่น</h3>
+  <div class="panel"><div class="row"><button class="btn" data-books>เปลี่ยนวิชา / สร้างสมุดใหม่</button></div></div>`;
+}
+
+/* ---------------- dialogs ---------------- */
+function openDlg(html){$("#dlgBody").innerHTML=html;const d=$("#dlg");if(!d.open) d.showModal()}
+function closeDlg(){const d=$("#dlg");if(d.open) d.close()}
+let cfmResolve=null;
+function ask(msg,ok,cancel){
+  return new Promise(res=>{cfmResolve=res;$("#cfmBody").innerHTML=`<p style="font-size:18px;margin:4px 0 16px">${msg}</p><div class="row" style="justify-content:flex-end"><button class="btn" data-cfm="0">${esc(cancel||"ยกเลิก")}</button><button class="btn primary" data-cfm="1">${esc(ok||"ตกลง")}</button></div>`;const d=$("#cfm");if(!d.open) d.showModal()});
+}
+function studentDlg(rid,sid){
+  const r=S.rooms.find(x=>x.id===rid),st=r&&r.students.find(x=>x.sid===sid);if(!st) return;
+  const s=studentStats(r,st,roomCtx(r)),a=attStr(rid,sid),sc=S.sc[rid];
+  let dots="";for(let k=1;k<=N();k++){const dd=sessDate(r,k),h=isHol(dd),en=enrolledOn(st,iso(dd)),ch=a[k-1];dots+=`<div class="dot ${h||!en?"h":ch!=="_"?ch:""}" title="คาบ ${k}">${!h&&en&&ch!=="_"?ch:""}</div>`}
+  const f=sc.f[sid]||{},sv=sc.s[sid]||{},q=sc.q[sid]||[],l=sc.lit[sid]||[];
+  const logs=S.logs.filter(x=>x.room===rid&&x.sid===sid);
+  openDlg(`<header><div><h3>${esc(st.name)}</h3><div class="muted">${esc(r.name)} เลขที่ ${st.no} เลขประจำตัว ${esc(st.sid)}${st.st==="out"?"  (ย้ายออกแล้ว)":""}</div></div><button class="btn small" data-close>ปิด</button></header>
+   <div class="reasons" style="margin-bottom:10px"><span class="pill ${s.status==="ต้องช่วยเหลือ"?"bad":s.status==="เฝ้าระวัง"?"warn":"ok"}">${s.status}</span>${s.reasons.map(x=>`<span class="pill ${x[0]}">${esc(x[1])}</span>`).join("")}</div>
+   <div class="group-label">เวลาเรียน ${s.T} คาบที่นับ  มา ${s.cnt["ม"]} สาย ${s.cnt["ส"]} กิจกรรม ${s.cnt["ก"]} ลา ${s.cnt["ล"]+s.cnt["ป"]} ขาด ${s.cnt["ข"]}  ขาดได้อีก ${s.remain} คาบ</div><div class="dots">${dots}</div>
+   ${forms().length?`<div class="group-label">ใบงานระหว่างทาง</div><div class="reasons">${forms().map(fm=>{const v=f[fm.id];const c=v==="✓"?"ok":v==="ล"?"warn":v==="x"||(!v&&sc.due[fm.id])?"bad":"neu";return `<span class="pill ${c}">${esc(fm.name.length>12?fm.name.slice(0,12)+"…":fm.name)}</span>`}).join("")}</div>`:""}
+   <div class="group-label">คะแนนเก็บและสอบ</div>
+   <div class="tw"><table><tr><th>รายการ</th><th>ได้</th><th>เต็ม</th></tr>${items().map(m=>`<tr><td>${esc(m.name)}</td><td class="n">${blank(sv[m.id])?"–":sv[m.id]}</td><td class="n">${m.max}</td></tr>`).join("")}
+   <tr><td><b>ก่อนกลางภาค / กลางภาค / หลังกลางภาค / ปลายภาค</b></td><td class="n" colspan="2">${s.tot.um01} / ${s.tot.mid} / ${s.tot.um02} / ${s.tot.fin}</td></tr>
+   <tr><td><b>รวม ${s.result?`ผลการเรียน ${s.result}`:""}</b></td><td class="n" colspan="2"><b>${s.tot.all}</b> / ${s.fullMax}</td></tr></table></div>
+   ${s.inds.length?`<div class="group-label">ผลตัวชี้วัด</div><div class="reasons">${s.inds.map(([n,res])=>`<span class="pill ${res==="ผ่าน"?"ok":res?"bad":"neu"}">${esc(n)} ${res||"ยังไม่ครบ"}</span>`).join("")}</div>`:""}
+   <div class="group-label">คุณลักษณะอันพึงประสงค์ ${s.qL==null?"(ยังไม่ครบ)":`สรุป ${LEVEL_NAME[s.qL]}`}</div><div class="reasons">${ATTR.map((x,i)=>`<span class="pill neu">${i+1}. ${esc(x)} ${blank(q[i])?"–":q[i]}</span>`).join("")}</div>
+   <div class="group-label">อ่าน คิดวิเคราะห์ และเขียน ${s.lL==null?"(ยังไม่ครบ)":`สรุป ${LEVEL_NAME[s.lL]}`}</div><div class="reasons">${S.config.litNames.map((x,i)=>`<span class="pill neu">${esc(x)} ${blank(l[i])?"–":l[i]}</span>`).join("")}</div>
+   <div class="group-label">การย้าย</div>
+   <div class="grid2"><label class="f">วันที่ย้ายเข้า (ว่าง = อยู่ตั้งแต่ต้นภาค)<input type="date" data-sdate="${rid}|${esc(sid)}|inD" value="${st.inD||""}"></label>
+    ${st.st==="out"?`<label class="f">วันที่ย้ายออก<input type="date" data-sdate="${rid}|${esc(sid)}|outD" value="${st.outD||""}"></label>`:""}</div>
+   <div class="row" style="margin-top:8px">${st.st==="out"?`<button class="btn" data-undoout="${esc(sid)}" data-r="${rid}">ยกเลิกการย้ายออก</button>`:`<button class="btn" data-outdlg="${esc(sid)}" data-r="${rid}">ย้ายออก</button><button class="btn" data-movedlg="${esc(sid)}" data-r="${rid}">ย้ายห้อง</button>`}</div>
+   <div class="group-label">บันทึกการช่วยเหลือ (${logs.length})</div>${logs.map(x=>`<div class="muted" style="font-size:14px">${x.date}  ${esc(x.issue)}  ${esc(x.action)}  ${esc(x.result||"")}</div>`).join("")}
+   <div class="row" style="margin-top:12px">${s.msg?`<button class="btn" data-copy="${esc(s.msg)}">คัดลอกข้อความแจ้งเตือน</button>`:""}<button class="btn primary" data-newlog="${esc(sid)}" data-r="${rid}">เพิ่มบันทึกช่วยเหลือ</button></div>`);
+}
+function outDlg(rid,sid){
+  const r=S.rooms.find(x=>x.id===rid),st=r.students.find(x=>x.sid===sid);
+  openDlg(`<header><h3>ย้ายออก: ${esc(st.name)}</h3><button class="btn small" data-close>ปิด</button></header>
+   <p class="muted">ข้อมูลเช็กชื่อและคะแนนเดิมยังเก็บไว้ นักเรียนจะไม่แสดงในการเช็กชื่อหลังวันที่ย้ายออก และไม่ถูกส่งออกไป BookMark</p>
+   <div class="grid2"><label class="f">วันที่ย้ายออก<input type="date" id="outD" value="${iso(new Date())}"></label><label class="f">หมายเหตุ<input id="outWhy" placeholder="เช่น ย้ายโรงเรียน ลาออก"></label></div>
+   <div class="row" style="margin-top:10px"><button class="btn primary" data-dooout="${esc(sid)}" data-r="${rid}">ยืนยันย้ายออก</button></div>`);
+}
+function moveDlg(rid,sid){
+  const r=S.rooms.find(x=>x.id===rid),st=r.students.find(x=>x.sid===sid);
+  openDlg(`<header><h3>ย้ายห้อง: ${esc(st.name)}</h3><button class="btn small" data-close>ปิด</button></header>
+   <p class="muted">ข้อมูลเช็กชื่อและคะแนนทั้งหมดจะย้ายตามไปห้องใหม่</p>
+   <div class="grid2"><label class="f">ไปห้อง<select id="mvRoom">${S.rooms.filter(x=>x.id!==rid).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select></label><label class="f">เลขที่ในห้องใหม่<input type="number" id="mvNo" value="${st.no}"></label></div>
+   <div class="row" style="margin-top:10px"><button class="btn primary" data-domove="${esc(sid)}" data-r="${rid}">ยืนยันย้ายห้อง</button></div>`);
+}
+const ISSUES=["ขาดเรียนบ่อย","มาสาย","ค้างงาน","คะแนนต่ำกว่าเกณฑ์","พฤติกรรมในชั้นเรียน","สุขภาพ","ครอบครัว/เศรษฐกิจ","อื่น ๆ"];
+const ACTIONS=["พูดคุย/ตักเตือน","มอบงานชดเชย","สอนซ่อมเสริม","แจ้งผู้ปกครอง","แจ้งครูที่ปรึกษา","ส่งต่อแนะแนว","เยี่ยมบ้าน","อื่น ๆ"];
+const RESULTS=["","ดีขึ้น","คงเดิม","แย่ลง","ส่งต่อแล้ว","ยุติ"];
+function logDlg(rid,sid,id){
+  const r=S.rooms.find(x=>x.id===rid),l=id?S.logs.find(x=>x.id===id):{id:"",room:rid,sid:sid||"",date:iso(new Date()),issue:ISSUES[0],detail:"",action:ACTIONS[0],notify:"",follow:"",result:""};
+  const opt=(arr,v)=>arr.map(x=>`<option ${x===v?"selected":""}>${esc(x)}</option>`).join("");
+  openDlg(`<header><h3>${id?"แก้ไขบันทึก":"บันทึกการช่วยเหลือ"} ${esc(r.name)}</h3><button class="btn small" data-close>ปิด</button></header>
+   <form id="logForm" class="grid2" data-id="${l.id}" data-room="${rid}">
+   <label class="f">นักเรียน<select name="sid" required><option value="">เลือกนักเรียน</option>${r.students.map(s=>`<option value="${esc(s.sid)}" ${s.sid===l.sid?"selected":""}>${s.no} ${esc(s.name)}</option>`).join("")}</select></label>
+   <label class="f">วันที่<input type="date" name="date" value="${l.date}" required></label>
+   <label class="f">ประเด็นที่พบ<select name="issue">${opt(ISSUES,l.issue)}</select></label>
+   <label class="f">การช่วยเหลือ<select name="action">${opt(ACTIONS,l.action)}</select></label>
+   <label class="f" style="grid-column:1/-1">รายละเอียด<textarea name="detail" rows="3">${esc(l.detail)}</textarea></label>
+   <label class="f">แจ้งผู้ปกครอง/ครูที่ปรึกษา<input name="notify" value="${esc(l.notify)}"></label>
+   <label class="f">นัดติดตาม<input type="date" name="follow" value="${l.follow}"></label>
+   <label class="f">ผลการติดตาม<select name="result">${opt(RESULTS,l.result)}</select></label>
+   <div class="row" style="grid-column:1/-1;margin-top:6px"><button class="btn primary" type="submit">บันทึก</button>${id?`<button class="btn ghost" type="button" data-dellog="${id}">ลบบันทึกนี้</button>`:""}</div></form>`);
+}
+function booksDlg(){
+  const L=S.books.list;
+  openDlg(`<header><h3>สมุดประจำวิชา</h3><button class="btn small" data-close>ปิด</button></header>
+   ${L.map(b=>`<div class="bk"><div><b>${esc(b.title)}</b>${b.id===S.bid?` <span class="pill ok">เปิดอยู่</span>`:""}</div>${b.id===S.bid?"":`<button class="btn small" data-openbook="${b.id}">เปิด</button>`}</div>`).join("")||`<p class="muted">ยังไม่มีสมุด</p>`}
+   <h3 class="sec">สร้างสมุดใหม่</h3>
+   <div class="grid2"><label class="f">ชื่อรายวิชา<input id="nbSubject"></label><label class="f">รหัสวิชา<input id="nbCode"></label>
+    <label class="f">ภาคเรียน/ปีการศึกษา<input id="nbTerm" placeholder="1/2570"></label><label class="f">ระดับชั้น ม.<input id="nbLevel" value="4"></label>
+    <label class="f" style="grid-column:1/-1">โครงสร้างรายวิชา<select id="nbFrom"><option value="">เริ่มใหม่ (คาบ 40 คาบ และคะแนน 30/20/20/30)</option>${L.map(b=>`<option value="${b.id}">คัดลอกโครงสร้างจาก ${esc(b.title)}</option>`).join("")}</select></label></div>
+   <p class="muted" style="font-size:14px">คัดลอกโครงสร้าง = คาบเรียน ใบงาน รายการคะแนน เกณฑ์ และคาบต่อสัปดาห์ ไม่คัดลอกนักเรียน เช็กชื่อ หรือคะแนน</p>
+   <div class="row"><button class="btn primary" data-createbook>สร้างสมุด</button></div>
+   <h3 class="sec">นำเข้าสมุดจากไฟล์สำรองรายวิชา</h3>
+   <p class="muted" style="font-size:14px">ใช้กับไฟล์ที่ส่งออกจากปุ่ม “ส่งออกสมุดนี้” หรือ “สำรองข้อมูลสมุดนี้” ของแอปเดิม จะได้เป็นสมุดเล่มใหม่ ไม่ทับเล่มที่มีอยู่</p>
+   <label class="btn" style="display:inline-flex;align-items:center">เลือกไฟล์<input type="file" accept=".json,application/json" data-importbook hidden></label>`);
+}
+async function createBook(){
+  const subject=$("#nbSubject").value.trim(),code=$("#nbCode").value.trim(),term=$("#nbTerm").value.trim(),level=$("#nbLevel").value.trim()||"4",from=$("#nbFrom").value;
+  if(!subject||!code||!term){toast("กรอกชื่อรายวิชา รหัสวิชา และภาคเรียนให้ครบ");return}
+  let base=newConfig();
+  if(from){const src=from===S.bid?S.config:newConfig(await readDoc(`bk_${from}_config`));STRUCT_KEYS.forEach(k=>{if(src[k]!==undefined) base[k]=clone(src[k])});base.holidays=[];base.start=nextMonday()}
+  Object.assign(base,{subject,code,term,level});
+  const id="b"+(S.books.seq||S.books.list.length+1);S.books.seq=(S.books.seq||S.books.list.length+1)+1;
+  await flushAll();
+  S.books.list.push({id,title:bookTitle(base)});
+  await writeDoc(`bk_${id}_config`,clone(base));await writeDoc(`bk_${id}_rooms`,{list:[]});
+  persist("books");
+  await openBook(id);S.ui.tab="set";closeDlg();render();toast("สร้างสมุดแล้ว นำเข้ารายชื่อนักเรียนได้เลย");
+}
+function syncTitle(){const b=S.books.list.find(x=>x.id===S.bid);if(b){const t=bookTitle(S.config);if(b.title!==t){b.title=t;persist("books")}}}
+function copyText(t){const done=()=>toast("คัดลอกแล้ว");if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,()=>showText(t));else showText(t)}
+function showText(t){openDlg(`<header><h3>ข้อความ</h3><button class="btn small" data-close>ปิด</button></header><textarea class="out" readonly>${esc(t)}</textarea><p class="muted">กดค้างที่ข้อความเพื่อเลือกทั้งหมดแล้วคัดลอก</p>`)}
+
+/* ---------------- roster import ---------------- */
+let XL=null;
+function loadXLSX(){
+  if(window.XLSX) return Promise.resolve(window.XLSX);
+  if(XL) return XL;
+  XL=new Promise((res,rej)=>{const s=document.createElement("script");s.src=XLSX_URL;s.onload=()=>window.XLSX?res(window.XLSX):rej(new Error("load"));s.onerror=()=>{XL=null;rej(new Error("load"))};document.head.appendChild(s)});
+  return XL;
+}
+const numOf=x=>typeof x==="number"?x:(typeof x==="string"&&/^\s*\d+(\.0+)?\s*$/.test(x)?Math.round(+x):null);
+const isTh=x=>typeof x==="string"&&/[฀-๿]/.test(x)&&!/\d/.test(x);
+const isSid=x=>{const n=numOf(x);return n!=null&&n>=1000&&n<=99999999};
+/* rows: array of arrays. returns [{room,no,sid,name}] */
+function parseRoster(rows,defRoom){
+  const out=[];let cur=defRoom||null;
+  for(const raw of rows){
+    const row=(raw||[]).map(x=>x==null?"":x);
+    for(const c of row){if(typeof c==="string"){const m=c.match(/ม\.?\s*\d\s*\/\s*(\d{1,2})/);if(m&&!isSid(c)) cur=String(+m[1])}}
+    for(let c=0;c<row.length;c++){
+      const a=row[c],b=row[c+1],d=row[c+2],e=row[c+3],f=row[c+4];
+      // BookMark: id | ชื่อสกุล | ห้อง | เลขที่
+      if(isSid(a)&&isTh(b)&&numOf(d)!=null&&numOf(d)<100&&numOf(e)!=null&&numOf(e)<100&&!isTh(d)){out.push({room:String(numOf(d)),no:numOf(e),sid:String(numOf(a)),name:normName(b)});c+=3;continue}
+      // ใบคะแนน OMR: id | เลขที่ | ชื่อ | สกุล | ห้อง
+      if(isSid(a)&&numOf(b)!=null&&numOf(b)<100&&isTh(d)&&isTh(e)&&numOf(f)!=null&&numOf(f)<100){out.push({room:String(numOf(f)),no:numOf(b),sid:String(numOf(a)),name:normName(d+" "+e)});c+=4;continue}
+      // ใบรายชื่อ: เลขที่ | id | ชื่อ–สกุล [| สกุล]
+      if(numOf(a)!=null&&numOf(a)>=1&&numOf(a)<100&&isSid(b)&&isTh(d)){let name=d;if(isTh(e)&&!/\s/.test(normName(d))){name=d+" "+e;c++}out.push({room:cur,no:numOf(a),sid:String(numOf(b)),name:normName(name)});c+=2;continue}
+    }
+  }
+  const seen=new Set();return out.filter(x=>{if(seen.has(x.sid)) return false;seen.add(x.sid);return true});
+}
+async function importFile(file){
+  try{
+    let rows=[];
+    if(/\.csv$/i.test(file.name)){rows=(await file.text()).split(/\r?\n/).map(l=>l.split(/,|\t/))}
+    else{const X=await loadXLSX();const wb=X.read(await file.arrayBuffer(),{type:"array"});wb.SheetNames.forEach(n=>{rows=rows.concat(X.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:""}))})}
+    const list=parseRoster(rows,null);
+    if(!list.length){toast("ไม่พบรายชื่อนักเรียนในไฟล์นี้");return}
+    if(list.some(x=>!x.room)){toast("บางรายชื่อไม่ทราบห้อง ใช้วิธีวางรายชื่อและระบุห้องแทน");return}
+    reviewImport(list);
+  }catch(e){console.error(e);toast(e&&e.message==="load"?"โหลดตัวอ่านไฟล์ Excel ไม่ได้ ตรวจการเชื่อมต่ออินเทอร์เน็ต":"อ่านไฟล์ไม่สำเร็จ")}
+}
+function pasteImport(){
+  const rn=$("#impRoom").value.trim().replace(/^ม\.?\s*/,""),m=rn.match(/^\d+\/(\d+)$/),txt=$("#impText").value;
+  const rows=txt.split(/\r?\n/).map(l=>{if(/\t|,/.test(l)) return l.split(/\t|,/).map(x=>x.trim());const t=l.trim().split(/\s+/);return t.length>=3&&/^\d+$/.test(t[0])&&/^\d+$/.test(t[1])?[t[0],t[1],t.slice(2).join(" ")]:[l]});
+  const list=parseRoster(rows,m?String(+m[1]):null);
+  if(!list.length){toast("ไม่พบรายชื่อในรูปแบบ เลขที่ เลขประจำตัว ชื่อ");return}
+  if(list.some(x=>!x.room)){toast("ระบุห้องเป็นรูปแบบ 4/2");return}
+  reviewImport(list);
+}
+let IMP=null;
+function diffRoster(list){
+  const lv=S.config.level||"4",changes=[],byRoom={};
+  list.forEach(x=>{(byRoom[x.room]=byRoom[x.room]||[]).push(x)});
+  const where={};S.rooms.forEach(r=>r.students.forEach(s=>{where[s.sid]={r,s}}));
+  Object.entries(byRoom).forEach(([rn,arr])=>{
+    const rid=`${lv}-${rn}`,exist=S.rooms.find(r=>r.id===rid),initial=!exist||!exist.students.length;
+    arr.forEach(x=>{
+      const w=where[x.sid];
+      if(!w) changes.push({t:initial?"new":"in",rid,x});
+      else if(w.r.id!==rid) changes.push({t:"move",rid,from:w.r.id,x});
+      else if(w.s.st==="out") changes.push({t:"in",rid,x,back:true});
+      else{if(+w.s.no!==+x.no) changes.push({t:"no",rid,x,old:w.s.no});if(bareName(w.s.name)!==bareName(x.name)) changes.push({t:"name",rid,x,old:w.s.name})}
+    });
+    if(exist){const ids=new Set(list.map(x=>x.sid));exist.students.forEach(s=>{if(s.st!=="out"&&!ids.has(s.sid)) changes.push({t:"out",rid,x:{sid:s.sid,no:s.no,name:s.name}})})}
+  });
+  return changes;
+}
+function reviewImport(list){
+  const ch=diffRoster(list);IMP=ch;
+  if(!ch.length){toast(`รายชื่อ ${list.length} คน ตรงกับสมุดแล้ว ไม่มีการเปลี่ยนแปลง`);return}
+  const rname=id=>"ม."+id.replace("-","/");
+  const L={new:"รายชื่อใหม่",in:"ย้ายเข้า",out:"ย้ายออก",move:"ย้ายห้อง",no:"เปลี่ยนเลขที่",name:"แก้ชื่อ"};
+  const cnt=t=>ch.filter(c=>c.t===t).length;
+  const desc=c=>c.t==="move"?`${rname(c.from)} → ${rname(c.rid)} เลขที่ ${c.x.no}`:c.t==="no"?`${rname(c.rid)} เลขที่ ${c.old} → ${c.x.no}`:c.t==="name"?`${rname(c.rid)} เลขที่ ${c.x.no} “${esc(c.old)}” → “${esc(c.x.name)}”`:`${rname(c.rid)} เลขที่ ${c.x.no}`;
+  const needDate=ch.some(c=>c.t==="in"||c.t==="out");
+  openDlg(`<header><h3>ตรวจรายชื่อก่อนนำเข้า</h3><button class="btn small" data-close>ปิด</button></header>
+   <p>${Object.keys(L).filter(cnt).map(t=>`<span class="tag ${t==="name"?"no":t}">${L[t]} ${cnt(t)}</span>`).join("")}</p>
+   ${needDate?`<div class="grid2"><label class="f">วันที่มีผลของการย้ายเข้า/ย้ายออก<input type="date" id="impDate" value="${iso(new Date())}"></label></div>
+   <p class="muted" style="font-size:14px">นักเรียนย้ายเข้า: นับเวลาเรียนตั้งแต่วันนี้เป็นต้นไป  นักเรียนย้ายออก: ไม่แสดงในการเช็กชื่อหลังวันนี้ ข้อมูลเดิมยังเก็บไว้</p>`:""}
+   ${ch.some(c=>c.t==="out")?`<div class="note">ถ้าไฟล์นี้มีรายชื่อไม่ครบห้อง ให้เอาเครื่องหมายออกจากรายการ “ย้ายออก” ที่ไม่ถูกต้อง</div>`:""}
+   <div style="max-height:46vh;overflow:auto;margin:8px 0">${ch.map((c,i)=>`<label class="chg"><input type="checkbox" data-chg="${i}" checked><span><span class="tag ${c.t==="name"?"no":c.t}">${L[c.t]}</span>${esc(c.x.name)} <span class="muted">${c.x.sid}  ${desc(c)}</span></span></label>`).join("")}</div>
+   <div class="row"><button class="btn primary" data-applyimp>นำเข้ารายการที่เลือก</button></div>`);
+}
+function newRoom(rid){const lv=rid.split("-")[0],n=rid.split("-")[1];const r={id:rid,name:`ม.${lv}/${n}`,program:"",advisors:[],tt:[],students:[]};S.rooms.push(r);S.rooms.sort((a,b)=>roomNum(a)-roomNum(b));ensureRoom(r);watch("att_"+rid);watch("sc_"+rid);return r}
+function moveData(from,to,sid){
+  const a=S.att[from].m[sid];if(a!=null){S.att[to].m[sid]=a;delete S.att[from].m[sid]}
+  ["f","s","q","lit"].forEach(k=>{const v=S.sc[from][k][sid];if(v!=null){S.sc[to][k][sid]=v;delete S.sc[from][k][sid]}});
+  S.logs.forEach(l=>{if(l.room===from&&l.sid===sid) l.room=to});
+  ["att_"+from,"att_"+to,"sc_"+from,"sc_"+to,"logs"].forEach(persist);
+}
+function applyImport(){
+  const sel=[...document.querySelectorAll("[data-chg]")].filter(x=>x.checked).map(x=>IMP[+x.dataset.chg]);
+  const dt=($("#impDate")&&$("#impDate").value)||iso(new Date());
+  const touched=new Set();
+  sel.forEach(c=>{
+    let r=S.rooms.find(x=>x.id===c.rid)||newRoom(c.rid);touched.add(r.id);
+    if(c.t==="new") r.students.push({no:c.x.no,sid:c.x.sid,name:c.x.name,st:"in",inD:"",outD:"",why:""});
+    else if(c.t==="in"){const ex=r.students.find(s=>s.sid===c.x.sid);if(ex){ex.st="in";ex.outD="";ex.why="";ex.no=c.x.no}else r.students.push({no:c.x.no,sid:c.x.sid,name:c.x.name,st:"in",inD:dt,outD:"",why:""})}
+    else if(c.t==="out"){const s=r.students.find(s=>s.sid===c.x.sid);if(s){s.st="out";s.outD=dt}}
+    else if(c.t==="no"){const s=r.students.find(s=>s.sid===c.x.sid);if(s) s.no=c.x.no}
+    else if(c.t==="name"){const s=r.students.find(s=>s.sid===c.x.sid);if(s) s.name=c.x.name}
+    else if(c.t==="move"){const fr=S.rooms.find(x=>x.id===c.from),i=fr.students.findIndex(s=>s.sid===c.x.sid),s=fr.students.splice(i,1)[0];s.no=c.x.no;s.from=c.from;r.students.push(s);moveData(c.from,r.id,s.sid);touched.add(fr.id)}
+  });
+  S.rooms.forEach(r=>r.students.sort((a,b)=>(a.st==="out")-(b.st==="out")||a.no-b.no));
+  persist("rooms");touched.forEach(id=>{persist("att_"+id);persist("sc_"+id)});
+  if(!S.ui.room&&S.rooms.length) S.ui.room=S.rooms[0].id;
+  closeDlg();render();toast(`นำเข้าแล้ว ${sel.length} รายการ`);
+}
+
+/* ---------------- course-structure import (paste / วก.15 .docx) ---------------- */
+const JSZIP_URL="jszip.min.js";
+let JZ=null;
+function loadJSZip(){
+  if(window.JSZip) return Promise.resolve(window.JSZip);
+  if(JZ) return JZ;
+  JZ=new Promise((res,rej)=>{const s=document.createElement("script");s.src=JSZIP_URL;s.onload=()=>window.JSZip?res(window.JSZip):rej(new Error("load"));s.onerror=()=>{JZ=null;rej(new Error("load"))};document.head.appendChild(s)});
+  return JZ;
+}
+const thDigits=s=>String(s??"").replace(/[๐-๙]/g,c=>"๐๑๒๓๔๕๖๗๘๙".indexOf(c));
+const numIn=s=>{const m=thDigits(s).replace(/,/g,"").match(/\d+(\.\d+)?/);return m?Number(m[0]):null};
+function slotOf(s){const t=thDigits(s).toLowerCase().replace(/\s+/g,"");
+  if(/um01|ก่อนกลาง|ก่อนสอบกลาง/.test(t)) return "um01";
+  if(/um02|หลังกลาง|หลังสอบกลาง/.test(t)) return "um02";
+  if(/fin|ปลายภาค/.test(t)) return "fin";
+  if(/mid|กลางภาค/.test(t)) return "mid";
+  if(/ไม่ส่ง|none|^-$/.test(t)) return "none";
+  return null}
+const IND_RE=/[ก-ฮ]\s*\d+\.\d+\s*ม\.\s*\d(?:\s*-\s*\d)?\s*\/\s*\d+/g;
+const indCodes=s=>[...new Set((thDigits(s).match(IND_RE)||[]).map(x=>x.replace(/\s+/g," ").replace(/([ก-ฮ])\s*(\d)/,"$1 $2").replace(/ม\.\s*/,"ม.").replace(/\s*\/\s*/,"/").replace(/\s*-\s*/,"-").replace(/(\d) ม\./,"$1 ม.")))].join(", ");
+/* ก. paste */
+function pasteForms(){const names=$("#psForms").value.split(/\r?\n/).map(x=>x.replace(/\t/g," ").trim()).filter(Boolean);
+  if(!names.length){toast("ยังไม่ได้วางรายชื่อใบงาน");return}
+  reviewStruct({forms:names.map(n=>({name:n,on:true})),items:[],fulls:{},src:"วางรายการ"})}
+function pasteItems(){
+  const lines=$("#psItems").value.split(/\r?\n/).filter(l=>l.trim());const items=[],bad=[];
+  lines.forEach((l,i)=>{let c=l.includes("\t")?l.split("\t"):l.split(/\s{2,}|,/);c=c.map(x=>x.trim());
+    if(c.length<4){bad.push(i+1);return}
+    const max=numIn(c[2]),bm=slotOf(c[3]);
+    if(/^ชื่องาน/.test(c[0])) return;
+    if(max==null||!bm||!c[0]){bad.push(i+1);return}
+    items.push({name:c[0],ind:c[1],max,bm,on:true})});
+  if(!items.length){toast(bad.length?`อ่านไม่ได้ บรรทัดที่ ${bad.join(", ")}`:"ยังไม่ได้วางรายการคะแนน");return}
+  reviewStruct({forms:[],items,fulls:{},src:"วางรายการ",bad})}
+/* ข. วก.15 .docx */
+async function readDocxBlocks(buf){
+  const Z=await loadJSZip(),zip=await Z.loadAsync(buf),f=zip.file("word/document.xml");if(!f) throw new Error("notdocx");
+  const xml=new DOMParser().parseFromString(await f.async("string"),"application/xml");
+  const W="http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  const txt=el=>{let s="";el.getElementsByTagNameNS(W,"*");const walk=n=>{for(const c of n.childNodes){if(c.namespaceURI===W&&c.localName==="t") s+=c.textContent;else if(c.namespaceURI===W&&(c.localName==="tab")) s+="\t";else if(c.namespaceURI===W&&(c.localName==="br"||c.localName==="p")){walk(c);s+=" "}else if(c.nodeType===1) walk(c)}};walk(el);return s.replace(/[  ]+/g," ").trim()};
+  const body=xml.getElementsByTagNameNS(W,"body")[0],out=[];
+  for(const el of body.childNodes){if(el.nodeType!==1||el.namespaceURI!==W) continue;
+    if(el.localName==="p") out.push({p:txt(el)});
+    else if(el.localName==="tbl"){const rows=[];for(const tr of el.childNodes){if(tr.localName!=="tr") continue;const r=[];for(const tc of tr.childNodes){if(tc.localName==="tc") r.push(txt(tc))}rows.push(r)}out.push({t:rows})}}
+  return out;
+}
+function parseVK15(blocks){
+  const items=[],fulls={},forms=[],lessons=[],secUnits={};let cur=null,unit=null;
+  blocks.forEach(b=>{
+    if(b.p!=null){const t=b.p;const um=thDigits(t).match(/โครงสร้างหน่วยการเรียนรู้ที่\s*(\d+)\s*(?:เรื่อง\s*)?(.*)/);if(um){unit={n:+um[1],name:um[2].replace(/\s*ระดับชั้น.*$/,"").trim()}}
+      if(/คะแนนเต็ม/.test(t)&&t.length<160){const s=slotOf(t.replace(/คะแนนเต็ม.*/,""));if(s&&s!=="none"){cur={slot:s,full:numIn(t.slice(t.indexOf("คะแนนเต็ม")))}}}return}
+    const rows=b.t,h=(rows[0]||[]).join(" ");
+    if(cur&&/ชื่อหน่วย/.test(h)&&/คะแนน/.test(h)){
+      if(cur.full!=null) fulls[cur.slot]=cur.full;
+      const data=rows.filter(r=>numIn(r[r.length-1])!=null&&!/ชื่อหน่วย/.test(r.join(" ")));
+      data.forEach(r=>{(thDigits(r[0]).match(/\d+/g)||[]).forEach(n=>{if(+n<50)(secUnits[cur.slot]=secUnits[cur.slot]||[]).push(+n)})});
+      let prev="";data.forEach((r,i)=>{const max=numIn(r[r.length-1]);let name=(r[0]||"").replace(/\s+/g," ").trim();
+        const ind=indCodes(r.slice(1,-1).join(" "));
+        if(cur.slot==="mid"||cur.slot==="fin"){name=(cur.slot==="mid"?"สอบกลางภาค":"สอบปลายภาค")+(data.length>1?` ${i+1}`:"")}
+        else{if(!name) name=prev?prev+" (ต่อ)":"งานที่ "+(i+1);else prev=name;if(name.length>60) name=name.slice(0,60)+"…"}
+        items.push({name,ind:ind||(cur.slot==="mid"?"กลางภาค":cur.slot==="fin"?"ปลายภาค":""),max,bm:cur.slot,on:true})});
+      cur=null;return}
+    if(/ลำดับ/.test(h)&&/(ชื่อเรื่อง|ชื่อโรงเรียน)/.test(h)){
+      const hc=(rows[0]||[]).findIndex(x=>/เวลา/.test(x));
+      rows.slice(1).forEach(r=>{if(/^\d+$/.test(thDigits(r[0]).trim())&&r[1]&&r[1].trim()!=="-"){const nm=r[1].replace(/\s+/g," ").trim();forms.push({name:nm,on:false});
+        const hv=hc>=0?numIn(r[hc]):null;lessons.push({unit:unit?unit.n:null,unitName:unit?unit.name:"",name:nm,h:hv,flag:hv==null||hv%1!==0})}})}
+  });
+  return {items,fulls,forms,lessons,secUnits};
+}
+async function importVK15(file){
+  if(!/\.docx$/i.test(file.name)){toast("รองรับเฉพาะไฟล์ .docx  ถ้าเป็น .doc ให้เปิดใน Word แล้วบันทึกเป็น .docx ก่อน");return}
+  try{const r=parseVK15(await readDocxBlocks(await file.arrayBuffer()));
+    if(!r.items.length){toast("ไม่พบตารางคะแนนในหัวข้อ ก่อนกลางภาค / กลางภาค / หลังกลางภาค / ปลายภาค");return}
+    reviewStruct(Object.assign(r,{src:file.name}))}
+  catch(e){console.error(e);toast(e&&e.message==="load"?"โหลดตัวอ่านไฟล์ Word ไม่ได้ ตรวจการเชื่อมต่ออินเทอร์เน็ต":"อ่านไฟล์ไม่สำเร็จ")}
+}
+/* sessions from วก.15 */
+function buildSessions(r){
+  const L=r.lessons;if(!L.length) return null;
+  const pre=(r.secUnits.um01||[]).concat(r.secUnits.mid||[]),midAfter=pre.length?Math.max(...pre):null;
+  const out=[],notes=[];let midDone=false;
+  L.forEach((x,i)=>{
+    if(midAfter!=null&&!midDone&&x.unit!=null&&x.unit>midAfter){out.push("สอบกลางภาค");midDone=true}
+    const h=Math.max(1,Math.round(x.h||1));if(x.flag) notes.push(`หน่วย ${x.unit??"?"} “${x.name}” ไม่ระบุชั่วโมงเป็นจำนวนเต็ม ใส่ไว้ ${h} คาบ`);
+    for(let k=1;k<=h;k++) out.push(`หน่วย ${x.unit??"?"} ${x.name}${h>1?` (${k}/${h})`:""}`)});
+  if(!midDone){out.push("สอบกลางภาค");notes.push("หาตำแหน่งสอบกลางภาคไม่ได้ ใส่ไว้ท้ายหน่วยทั้งหมด กรุณาย้ายเอง")}
+  out.push("สอบปลายภาค");
+  return {lines:out,notes,midAfter};
+}
+async function importVK15Sessions(file){
+  if(!/\.docx$/i.test(file.name)){toast("รองรับเฉพาะไฟล์ .docx  ถ้าเป็น .doc ให้เปิดใน Word แล้วบันทึกเป็น .docx ก่อน");return}
+  try{const r=parseVK15(await readDocxBlocks(await file.arrayBuffer())),b=buildSessions(r);
+    if(!b){toast("ไม่พบตาราง “โครงสร้างหน่วยการเรียนรู้” ในไฟล์นี้");return}
+    const target=S.config.credits?Math.round(S.config.credits*40):null;
+    openDlg(`<header><h3>ตรวจคาบเรียนจาก วก.15</h3><button class="btn small" data-close>ปิด</button></header>
+     <p class="muted" style="margin-top:0">ที่มา: ${esc(file.name)}  สร้างจากตารางโครงสร้างหน่วย (1 ชั่วโมง = 1 คาบ)${b.midAfter!=null?`  สอบกลางภาคแทรกหลังหน่วยที่ ${b.midAfter}`:""}  แก้ข้อความในกล่องได้ก่อนบันทึก</p>
+     ${b.notes.length?`<div class="note">${b.notes.map(esc).join("<br>")}</div>`:""}
+     <p>ได้ <b id="sesCount">${b.lines.length}</b> คาบ ${target?(b.lines.length===target?`<span class="pill ok">ตรงกับ ${S.config.credits} หน่วยกิต (${target} คาบ)</span>`:`<span class="pill bad">${S.config.credits} หน่วยกิต ควรมี ${target} คาบ</span>`):`<span class="muted">(ยังไม่ได้กรอกหน่วยกิต)</span>`}</p>
+     <textarea id="sesText" class="out" style="background:var(--surface);min-height:260px">${esc(b.lines.join("\n"))}</textarea>
+     ${anyAtt()?`<div class="note">สมุดนี้เริ่มเช็กชื่อแล้ว การเช็กชื่อจะยังอยู่ที่ลำดับคาบเดิม (คาบที่ 1, 2, …) แต่ชื่อคาบจะเปลี่ยนตามรายการใหม่</div>`:""}
+     <div class="row" style="margin-top:10px"><button class="btn primary" data-applyses>ใช้รายการคาบนี้</button></div>`);
+  }catch(e){console.error(e);toast(e&&e.message==="load"?"โหลดตัวอ่านไฟล์ Word ไม่ได้ ตรวจการเชื่อมต่ออินเทอร์เน็ต":"อ่านไฟล์ไม่สำเร็จ")}
+}
+function anyAtt(){return S.rooms.some(r=>Object.values(S.att[r.id].m).some(v=>/[^_]/.test(v)))}
+function lastAttAll(){return S.rooms.reduce((m,r)=>Math.max(m,lastRecorded(r.id)),0)}
+function applySessions(){const lines=$("#sesText").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  if(!lines.length){toast("ต้องมีอย่างน้อย 1 คาบ");return}
+  const la=lastAttAll();if(lines.length<la){toast(`มีการเช็กชื่อถึงคาบที่ ${la} แล้ว ต้องมีอย่างน้อย ${la} คาบ`);return}
+  S.config.sessions=lines;persist("config");closeDlg();render();toast(`บันทึกคาบเรียน ${lines.length} คาบ`)}
+async function setCredits(v){
+  const c=S.config;if(!(v>0)){c.credits=null;persist("config");render();return}
+  const per=Math.max(1,Math.round(v*2)),total=Math.round(v*40),la=lastAttAll();
+  if(total<c.sessions.length&&la>total){toast(`มีการเช็กชื่อถึงคาบที่ ${la} แล้ว ลดเหลือ ${total} คาบไม่ได้`);render();return}
+  if(total!==c.sessions.length&&!await ask(`${v} หน่วยกิต = ${per} คาบ/สัปดาห์ รวม ${total} คาบ<br>ตอนนี้มี ${c.sessions.length} คาบ จะ${total>c.sessions.length?`เพิ่มคาบท้ายรายการ ${total-c.sessions.length} คาบ`:`ตัดคาบท้ายรายการออก ${c.sessions.length-total} คาบ`} และตั้งคาบต่อสัปดาห์เป็น ${per}`,"ตกลง")){render();return}
+  c.credits=v;c.perWeek=per;
+  if(total>c.sessions.length){for(let k=c.sessions.length+1;k<=total;k++) c.sessions.push("คาบที่ "+k)}else c.sessions=c.sessions.slice(0,total);
+  S.rooms.forEach(ensureRoom);persist("rooms");persist("config");render();toast(`ตั้งค่า ${v} หน่วยกิต: ${per} คาบ/สัปดาห์ ${total} คาบ`)}
+/* review + apply */
+let STR=null;
+function hasScoreData(){return S.rooms.some(r=>Object.values(S.sc[r.id].s).some(o=>o&&Object.values(o).some(v=>!blank(v))))}
+function hasFormData(){return S.rooms.some(r=>Object.values(S.sc[r.id].f).some(o=>o&&Object.keys(o).length))}
+function reviewStruct(d){
+  STR=d;const keys=["um01","mid","um02","fin"];
+  const sum=k=>d.items.filter(x=>x.on&&x.bm===k).reduce((t,x)=>t+Number(x.max),0);
+  const sums=keys.map(k=>{const s=sum(k),f=d.fulls[k];return `${SLOTS[k].split(" (")[0]} <b>${s}</b>${f!=null?(f===s?` <span class="pill ok">ตรงกับ วก.15 (${f})</span>`:` <span class="pill bad">วก.15 ระบุ ${f}</span>`):""}`}).join("<br>");
+  openDlg(`<header><h3>ตรวจโครงสร้างก่อนนำเข้า</h3><button class="btn small" data-close>ปิด</button></header>
+   <p class="muted" style="margin-top:0">ที่มา: ${esc(d.src)}  แก้ชื่อ ตัวชี้วัด คะแนนเต็ม และช่อง BookMark ได้ในตารางนี้</p>
+   ${d.bad&&d.bad.length?`<div class="note">อ่านไม่ได้และข้ามไป: บรรทัดที่ ${d.bad.join(", ")} (ต้องมี 4 ช่อง และคะแนนเต็มเป็นตัวเลข)</div>`:""}
+   ${d.items.length?`<div class="group-label">คะแนนเก็บและคะแนนสอบ (${d.items.length})</div>
+   <div class="tw ed" style="max-height:38vh;overflow:auto"><table><tr><th></th><th>ชื่องาน</th><th>ตัวชี้วัด</th><th>เต็ม</th><th>ช่อง BookMark</th></tr>
+   ${d.items.map((x,i)=>`<tr><td style="width:34px"><input type="checkbox" data-sti="${i}" ${x.on?"checked":""} style="width:22px;min-height:22px"></td><td><input data-stn="${i}" value="${esc(x.name)}"></td><td><input data-stind="${i}" value="${esc(x.ind)}"></td><td style="width:76px"><input type="number" data-stm="${i}" value="${x.max}"></td>
+   <td><select data-stb="${i}">${Object.entries(SLOTS).map(([k,t])=>`<option value="${k}" ${x.bm===k?"selected":""}>${t}</option>`).join("")}</select></td></tr>`).join("")}</table></div>
+   <p style="font-size:15px;margin:8px 0">รวมคะแนนเต็มที่เลือก:<br>${sums}  รวม <b>${keys.reduce((t,k)=>t+sum(k),0)}</b></p>`:""}
+   ${d.forms.length?`<div class="group-label">ใบงานระหว่างทาง (${d.forms.length})${d.items.length?` <span class="muted" style="font-weight:400;font-size:14px">รายชื่อเรื่องจากโครงสร้างหน่วย ติ๊กเฉพาะเรื่องที่มีใบงานไม่คิดคะแนน</span>`:""}</div>
+   <div style="max-height:30vh;overflow:auto">${d.forms.map((x,i)=>`<label class="chg"><input type="checkbox" data-stf="${i}" ${x.on?"checked":""}><span>${esc(x.name)}</span></label>`).join("")}</div>`:""}
+   <div class="group-label">วิธีนำเข้า</div>
+   <label class="chg"><input type="radio" name="stmode" value="replace" ${(d.items.length?!hasScoreData():!hasFormData())?"checked":""}><span>แทนที่รายการเดิม${(d.items.length&&hasScoreData())||(d.forms.length&&hasFormData())?` <span class="pill bad">มีการบันทึกคะแนน/การส่งงานแล้ว ข้อมูลของรายการเดิมจะไม่ถูกนับ</span>`:""}</span></label>
+   <label class="chg"><input type="radio" name="stmode" value="append" ${(d.items.length?hasScoreData():hasFormData())?"checked":""}><span>เพิ่มต่อท้ายรายการเดิม</span></label>
+   <div class="row" style="margin-top:10px"><button class="btn primary" data-applystruct>นำเข้า</button></div>`);
+}
+function applyStruct(){
+  const d=STR,mode=(document.querySelector('[name=stmode]:checked')||{}).value||"append";
+  const its=d.items.filter(x=>x.on&&x.name.trim()&&Number(x.max)>0),fms=d.forms.filter(x=>x.on&&x.name.trim());
+  if(!its.length&&!fms.length){toast("ยังไม่ได้เลือกรายการ");return}
+  const c=S.config;
+  if(its.length){const add=its.map(x=>({id:"s"+(c.seq++),name:x.name.trim(),ind:x.ind.trim(),max:Number(x.max),bm:x.bm}));c.items=mode==="replace"?add:c.items.concat(add)}
+  if(fms.length){const add=fms.map(x=>({id:"f"+(c.seq++),name:x.name.trim()}));c.forms=mode==="replace"?add:c.forms.concat(add)}
+  persist("config");S.ui.item=null;closeDlg();render();toast(`นำเข้าแล้ว: คะแนน ${its.length} รายการ ใบงาน ${fms.length} รายการ`);
+}
+
+/* ---------------- export ---------------- */
+function csvLine(a){return a.map(v=>{v=String(v??"");return /[",\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v}).join(",")}
+const MIME={csv:"text/csv;charset=utf-8",json:"application/json",xlsx:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"};
+function canShareFiles(){try{const mob=/iPad|iPhone|Android/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent));return mob&&!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[new File(["x"],"x.txt",{type:"text/plain"})]}))}catch(e){return false}}
+async function saveFile(filename,data,opt){
+  const ext=filename.split(".").pop().toLowerCase(),blob=data instanceof Blob?data:new Blob([data],{type:MIME[ext]||"application/octet-stream"});
+  if(window.claude&&window.claude.use){try{const dl=await window.claude.use("downloads");if(dl){await dl.save({filename,data:new Uint8Array(await blob.arrayBuffer())});return true}}catch(e){if(e&&e.code==="declined") return false}}
+  if(opt&&opt.share&&canShareFiles()){try{await navigator.share({files:[new File([blob],filename,{type:blob.type})],title:filename});return true}catch(e){if(e&&e.name==="AbortError") return false}}
+  try{const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},5000);return true}
+  catch(e){toast("บันทึกไฟล์ไม่สำเร็จ");return false}
+}
+const stamp=()=>iso(new Date());
+function exportCSV(kind){
+  const lines=[],c=S.config;
+  if(kind==="csv"){lines.push(csvLine(["ห้อง","เลขที่","เลขประจำตัว","ชื่อ-สกุล",...items().map(i=>`${i.name}(${i.max})`),"ก่อนกลางภาค","กลางภาค","หลังกลางภาค","ปลายภาค","รวม","ผลการเรียน","คุณลักษณะ","อ่านคิดวิเคราะห์เขียน","%เวลาเรียน","สถานะคัดกรอง"]));
+    S.rooms.forEach(r=>{const ctx=roomCtx(r);active(r).forEach(st=>{const s=studentStats(r,st,ctx),sv=S.sc[r.id].s[st.sid]||{};lines.push(csvLine([r.name,st.no,st.sid,st.name,...items().map(i=>sv[i.id]??""),s.tot.um01,s.tot.mid,s.tot.um02,s.tot.fin,s.tot.all,s.result,s.qL??"",s.lL??"",s.pctAtt==null?"":Math.round(s.pctAtt*100),s.status]))})})}
+  else{lines.push(csvLine(["ห้อง","เลขที่","เลขประจำตัว","ชื่อ-สกุล",...c.sessions.map((x,i)=>"คาบ"+(i+1)),"มา","สาย","กิจกรรม","ลากิจ","ลาป่วย","ขาด","คาบที่นับ","ขาดได้อีก","สถานะ"]));
+    S.rooms.forEach(r=>{const ctx=roomCtx(r);r.students.forEach(st=>{const a=attStr(r.id,st.sid),s=studentStats(r,st,ctx);lines.push(csvLine([r.name,st.no,st.sid,st.name,...[...a].map(x=>x==="_"?"":x),s.cnt["ม"],s.cnt["ส"],s.cnt["ก"],s.cnt["ล"],s.cnt["ป"],s.cnt["ข"],s.T,s.remain,st.st==="out"?"ย้ายออก":st.inD?"ย้ายเข้า":""]))})})}
+  saveFile(`${kind==="csv"?"คะแนน":"เวลาเรียน"}_${c.code}_${stamp()}.csv`,"﻿"+lines.join("\r\n"));
+}
+function exportJSON(){const b=S.books.list.find(x=>x.id===S.bid);saveFile(`สำรอง_${S.config.code}_${stamp()}.json`,JSON.stringify({app:"classbook",v:2,title:b&&b.title,config:S.config,rooms:S.rooms,att:S.att,sc:S.sc,logs:S.logs}),{share:true})}
+/* whole-device backup / restore */
+async function backupAll(){
+  await flushAll();const o={app:"classbook",v:3,at:new Date().toISOString(),docs:allDocs()};
+  if(await saveFile(`สำรองสมุดประจำวิชา_${stamp()}.json`,JSON.stringify(o),{share:true})){await setMeta({lastBackup:new Date().toISOString()});render();toast("สำรองข้อมูลแล้ว")}
+}
+async function replaceAll(docs,label){
+  if(!await ask(`${label}<br>ข้อมูลทุกสมุดในเครื่องนี้จะถูกแทนที่ ดำเนินการต่อ?`,"กู้คืน")) return;
+  await flushAll();
+  for(const k of Object.keys(allDocs())) await kvDel(k);
+  for(const [k,v] of Object.entries(docs)) await kvPut(k,v);
+  toast("กู้คืนแล้ว กำลังเปิดใหม่…");setTimeout(()=>location.reload(),600);
+}
+async function importBookFile(o){
+  const bt=o.config?newConfig(o.config):null;if(!bt||!Array.isArray(o.rooms)){toast("ไฟล์นี้ไม่ใช่ไฟล์สำรองของสมุด");return}
+  await flushAll();
+  const id="b"+(S.books.seq||S.books.list.length+1);S.books.seq=(S.books.seq||S.books.list.length+1)+1;
+  await writeDoc(`bk_${id}_config`,clone(bt));await writeDoc(`bk_${id}_rooms`,{list:o.rooms});await writeDoc(`bk_${id}_logs`,{items:o.logs||[]});
+  for(const r of o.rooms){await writeDoc(`bk_${id}_att_${r.id}`,(o.att||{})[r.id]||{m:{}});await writeDoc(`bk_${id}_sc_${r.id}`,(o.sc||{})[r.id]||emptySc())}
+  S.books.list.push({id,title:bookTitle(bt)});persist("books");
+  await openBook(id);closeDlg();S.ui.tab="att";render();toast("นำเข้าสมุดแล้ว: "+bookTitle(bt));
+}
+const daysSince=t=>t?Math.floor((Date.now()-new Date(t).getTime())/864e5):null;
+/* BookMark */
+function bmName(n){const b=bareName(n);const i=b.indexOf(" ");return (i<0?b:b.slice(0,i)+"  "+b.slice(i+1)).padEnd(100," ")}
+function bmStudents(){const out=[];S.rooms.slice().sort((a,b)=>roomNum(a)-roomNum(b)).forEach(r=>active(r).slice().sort((a,b)=>a.no-b.no).forEach(st=>out.push({r,st})));return out}
+function bmCheck(kind){
+  const list=bmStudents();let miss=0,dec=0;
+  list.forEach(({r,st})=>{const sc=S.sc[r.id];
+    if(kind==="quality"){if(qLevel(sc.q[st.sid])==null) miss++}
+    else if(kind==="literacy"){if(litLevel(sc.lit[st.sid])==null) miss++}
+    else{const sv=sc.s[st.sid]||{};items().filter(i=>i.bm===kind).forEach(i=>{if(blank(sv[i.id])) miss++;else if(Number(sv[i.id])%1) dec++})}});
+  return {n:list.length,miss,dec};
+}
+function bmBuild(kind){
+  const c=S.config,B=S.books,head=["เลขประจำตัว","ชื่อสกุล","ห้อง","เลขที่"];
+  const sid=x=>/^\d+$/.test(x)?+x:x;
+  let title,cols,rowOf;
+  if(kind==="quality"){title=`คะแนนหน่วยการเรียนรู้รหัสวิชา ${c.code}  รหัสครู ${B.tcode} ${B.tname}`;
+    cols=[];QSUB.forEach((k,i)=>{for(let j=1;j<=k;j++) cols.push(`QM${i+1}-${j}`);cols.push(`QM${i+1}`)});cols.push("Qgrade");
+    rowOf=(r,st)=>{const q=S.sc[r.id].q[st.sid]||[],o=[];QSUB.forEach((k,i)=>{const v=blank(q[i])?"":Number(q[i]);for(let j=0;j<=k;j++) o.push(v)});const lv=qLevel(q);o.push(lv==null?"":lv);return o}}
+  else if(kind==="literacy"){title=`คะแนนหน่วยการเรียนรู้รหัสวิชา ${c.code}  รหัสครู ${B.tcode} ${B.tname}`;cols=["คะแนน1","คะแนน2","คะแนน3","คะแนน4","คะแนน5","รวม"];
+    rowOf=(r,st)=>{const l=S.sc[r.id].lit[st.sid]||[],lv=litLevel(l);return [0,1,2,3,4].map(i=>blank(l[i])?"":Number(l[i])).concat(lv==null?"":lv)}}
+  else{title=kind==="um01"?`คะแนนหน่วยการเรียนรู้รหัสวิชา ${c.code} หน่วยที่ 01 รหัสครู ${B.tcode} ${B.tname}`:kind==="um02"?`คะแนนหน่วยการเรียนรู้รหัสวิชา ${c.code} หน่วยที่ 02 รหัสครู ${B.tcode} ${B.tname}`:kind==="mid"?`คะแนนรวมกลางภาครหัสวิชา ${c.code} กลางภาค รหัสครู ${B.tcode} ${B.tname}`:`คะแนนรวมปลายภาครหัสวิชา ${c.code} ปลายภาค รหัสครู ${B.tcode} ${B.tname}`;
+    cols=["คะแนน1","คะแนน2","คะแนน3","คะแนน4","คะแนน5","รวม"];
+    rowOf=(r,st)=>{const v=slotTotals(S.sc[r.id].s[st.sid]||{})[kind];return [v,0,0,0,0,v]}}
+  const aoa=[[title],head.concat(cols)];
+  bmStudents().forEach(({r,st})=>aoa.push([sid(st.sid),bmName(st.name),roomNum(r),Number(st.no)].concat(rowOf(r,st))));
+  return {aoa,ncol:head.length+cols.length,filename:`${c.code}-${kind==="quality"||kind==="literacy"?kind:SLOT_FILE[kind]}-${B.tcode}.xlsx`};
+}
+function bmDlg(){
+  const K=[["um01","คะแนนก่อนกลางภาค (หน่วยที่ 01)"],["mid","คะแนนสอบกลางภาค"],["um02","คะแนนหลังกลางภาค (หน่วยที่ 02)"],["fin","คะแนนสอบปลายภาค"],["quality","คุณลักษณะอันพึงประสงค์"],["literacy","อ่าน คิดวิเคราะห์ และเขียน"]];
+  openDlg(`<header><h3>ไฟล์สำหรับนำเข้า BookMark</h3><button class="btn small" data-close>ปิด</button></header>
+   ${!S.books.tcode||!S.books.tname?`<div class="note">ยังไม่ได้กรอกรหัสครูหรือชื่อครูในแท็บตั้งค่า หัวข้อ “ครูผู้สอน” ชื่อไฟล์และหัวไฟล์จะไม่ครบ</div>`:""}
+   <p class="muted" style="font-size:14px;margin-top:0">รหัสวิชา ${esc(S.config.code)} รหัสครู ${esc(S.books.tcode)}  เฉพาะนักเรียนที่ยังอยู่ (ไม่รวมคนย้ายออก) เรียงตามห้องและเลขที่ รูปแบบเดียวกับไฟล์ที่ส่งออกจาก BookMark</p>
+   ${K.map(([k,t])=>{const ck=bmCheck(k),mx=items().filter(i=>i.bm===k).reduce((s,i)=>s+Number(i.max),0);
+     return `<div class="bk"><div><b>${t}</b>${k in SLOT_FILE?` <span class="muted">เต็ม ${mx}</span>`:""}<br><span class="muted" style="font-size:14px">${ck.n} คน  ${ck.miss?`<span class="pill warn">${k in SLOT_FILE?`ช่องคะแนนว่าง ${ck.miss} ช่อง (นับเป็น 0)`:`ประเมินยังไม่ครบ ${ck.miss} คน (ส่งออกเป็นช่องว่าง)`}</span>`:`<span class="pill ok">ครบ</span>`}${ck.dec?` <span class="pill warn">มีคะแนนทศนิยม ${ck.dec} ช่อง</span>`:""}</span></div><button class="btn small" data-bm="${k}">ดาวน์โหลด</button></div>`}).join("")}`);
+}
+async function bmExport(kind){
+  try{const X=await loadXLSX(),b=bmBuild(kind);const ws=X.utils.aoa_to_sheet(b.aoa);ws["!merges"]=[{s:{r:0,c:0},e:{r:0,c:b.ncol-1}}];
+    const wb=X.utils.book_new();X.utils.book_append_sheet(wb,ws,"Amporn");const data=X.write(wb,{type:"array",bookType:"xlsx"});
+    if(await saveFile(b.filename,new Uint8Array(data))) toast("บันทึกไฟล์ "+b.filename);
+  }catch(e){console.error(e);toast(e&&e.message==="load"?"โหลดตัวสร้างไฟล์ Excel ไม่ได้ ตรวจการเชื่อมต่ออินเทอร์เน็ต":"สร้างไฟล์ไม่สำเร็จ")}
+}
+
+/* ---------------- events ---------------- */
+document.addEventListener("click",e=>{Promise.resolve().then(()=>onClick(e)).catch(err=>{console.error(err);toast("เกิดข้อผิดพลาด ("+(err&&err.message||err)+")")})});
+async function onClick(e){
+  const t=e.target.closest("button,[data-stu],.who");if(!t) return;
+  const d=t.dataset;
+  if(d.cfm!=null){$("#cfm").close();const r=cfmResolve;cfmResolve=null;if(r) r(d.cfm==="1");return}
+  if(S.ui.room){const rr=room();if(rr) ensureRoom(rr)}
+  if(d.books!=null&&t.matches("[data-books]")){booksDlg();return}
+  if(t.matches("[data-newbook]")){booksDlg();return}
+  if(d.openbook){closeDlg();setSave("กำลังเปิดสมุด…","busy");await openBook(d.openbook);setSave("บันทึกในเครื่องนี้");S.ui.tab="att";render();return}
+  if(t.matches("[data-createbook]")){await createBook();return}
+  if(d.room){S.ui.room=d.room;S.ui.k=null;render();return}
+  if(d.tab){S.ui.tab=d.tab;render();window.scrollTo(0,0);return}
+  if(d.go){S.ui.tab=d.go;render();return}
+  if(d.k&&!d.mark){S.ui.k=+d.k;render();return}
+  if(t.matches("[data-close]")){closeDlg();return}
+  if(d.mark){const r=room(),m=S.att[r.id].m,i=S.ui.k-1,cur=attStr(r.id,d.sid);m[d.sid]=cur.slice(0,i)+(cur[i]===d.mark?"_":d.mark)+cur.slice(i+1);persist("att_"+r.id);render();return}
+  if(t.matches("[data-allpresent]")){const r=room(),m=S.att[r.id].m,i=S.ui.k-1,di=iso(sessDate(r,S.ui.k));r.students.filter(st=>enrolledOn(st,di)).forEach(st=>{const cur=attStr(r.id,st.sid);if(cur[i]==="_") m[st.sid]=cur.slice(0,i)+"ม"+cur.slice(i+1)});persist("att_"+r.id);render();toast("บันทึก มา ให้ทุกคนที่ยังว่างแล้ว");return}
+  if(t.matches("[data-clearsess]")){if(!await ask("ล้างการเช็กชื่อของคาบนี้ทั้งหมด?","ล้าง")) return;const r=room(),m=S.att[r.id].m,i=S.ui.k-1;Object.keys(m).forEach(sid=>{const cur=attStr(r.id,sid);m[sid]=cur.slice(0,i)+"_"+cur.slice(i+1)});persist("att_"+r.id);render();return}
+  if(d.item){S.ui.item=d.item;render();return}
+  if(d.fmark){const r=room(),sc=S.sc[r.id],id=S.ui.item.split(":")[1],o=sc.f[d.sid]=sc.f[d.sid]||{};if(o[id]===d.fmark) delete o[id];else o[id]=d.fmark;persist("sc_"+r.id);render();return}
+  if(d.fall){const r=room(),sc=S.sc[r.id],id=S.ui.item.split(":")[1];active(r).forEach(st=>{const o=sc.f[st.sid]=sc.f[st.sid]||{};if(!o[id]) o[id]="✓"});persist("sc_"+r.id);render();return}
+  if(d.rate!=null&&t.matches("[data-rate]")){const r=room(),sc=S.sc[r.id],[ty,n]=S.ui.item.split(":"),key=ty==="q"?"q":"lit",len=ty==="q"?8:5;const arr=(sc[key][d.sid]||Array(len).fill(null)).slice();while(arr.length<len) arr.push(null);arr[+n]=(!blank(arr[+n])&&+arr[+n]===+d.rate)?null:+d.rate;sc[key][d.sid]=arr;persist("sc_"+r.id);render();return}
+  if(d.rall){const r=room(),sc=S.sc[r.id],[ty,n]=S.ui.item.split(":"),key=ty==="q"?"q":"lit",len=ty==="q"?8:5;active(r).forEach(st=>{const arr=(sc[key][st.sid]||Array(len).fill(null)).slice();while(arr.length<len) arr.push(null);if(blank(arr[+n])) arr[+n]=+d.rall;sc[key][st.sid]=arr});persist("sc_"+r.id);render();return}
+  if(d.filter){S.ui.filter=d.filter;render();return}
+  if(d.scope){S.ui.scope=d.scope;render();return}
+  if(t.matches("[data-copy]")){copyText(d.copy);return}
+  if(t.matches("[data-copyall]")){const list=allStats(S.ui.scope).filter(o=>(S.ui.filter==="all"||o.s.status===S.ui.filter)&&o.s.msg).map(o=>o.s.msg);if(!list.length){toast("ไม่มีข้อความแจ้งเตือน");return}copyText(list.join("\n"));return}
+  if(t.matches("[data-newlog]")){logDlg(d.r||S.ui.room,d.newlog);return}
+  if(d.editlog){const l=S.logs.find(x=>x.id===d.editlog);logDlg(l.room,l.sid,l.id);return}
+  if(d.dellog){if(!await ask("ลบบันทึกนี้?","ลบ")) return;S.logs=S.logs.filter(x=>x.id!==d.dellog);persist("logs");closeDlg();render();return}
+  if(d.outdlg){outDlg(d.r,d.outdlg);return}
+  if(d.dooout){const r=S.rooms.find(x=>x.id===d.r),s=r.students.find(x=>x.sid===d.dooout);s.st="out";s.outD=$("#outD").value||iso(new Date());s.why=$("#outWhy").value.trim();persist("rooms");closeDlg();render();toast("บันทึกย้ายออกแล้ว");return}
+  if(d.undoout){const r=S.rooms.find(x=>x.id===d.r),s=r.students.find(x=>x.sid===d.undoout);s.st="in";s.outD="";s.why="";persist("rooms");studentDlg(d.r,d.undoout);render();return}
+  if(d.movedlg){if(S.rooms.length<2){toast("มีห้องเดียว ย้ายห้องไม่ได้");return}moveDlg(d.r,d.movedlg);return}
+  if(d.domove){const to=$("#mvRoom").value,no=+$("#mvNo").value,fr=S.rooms.find(x=>x.id===d.r),tr=S.rooms.find(x=>x.id===to),i=fr.students.findIndex(x=>x.sid===d.domove),s=fr.students.splice(i,1)[0];s.no=no||s.no;s.from=fr.id;tr.students.push(s);tr.students.sort((a,b)=>a.no-b.no);moveData(fr.id,to,s.sid);persist("rooms");closeDlg();render();toast(`ย้ายไป ${tr.name} แล้ว`);return}
+  if(d.stu){if($("#dlg").open&&!t.closest(".bk")) closeDlg();studentDlg(d.r||S.ui.room,d.stu);return}
+  if(d.delhol){S.config.holidays=S.config.holidays.filter(h=>h.d!==d.delhol);persist("config");render();return}
+  if(t.matches("[data-addhol]")){const dd=$("#holD").value,nn=$("#holN").value.trim();if(!dd){toast("เลือกวันที่ก่อน");return}S.config.holidays=S.config.holidays.filter(h=>h.d!==dd).concat({d:dd,n:nn||"วันหยุด"});persist("config");render();return}
+  if(t.matches("[data-addform]")){S.config.forms.push({id:"f"+(S.config.seq++),name:"ใบงานที่ "+(S.config.forms.length+1)});persist("config");render();return}
+  if(d.delform){const used=S.rooms.reduce((n,r)=>n+Object.values(S.sc[r.id].f).filter(o=>o&&o[d.delform]).length,0);if(!await ask(`ลบใบงานนี้?${used?` มีการบันทึกการส่งแล้ว ${used} คน`:""}`,"ลบ")) return;S.config.forms=S.config.forms.filter(x=>x.id!==d.delform);persist("config");render();return}
+  if(t.matches("[data-additem]")){S.config.items.push({id:"s"+(S.config.seq++),name:"งานใหม่",ind:"",max:10,bm:"um01"});persist("config");render();return}
+  if(d.delitem){const used=S.rooms.reduce((n,r)=>n+Object.values(S.sc[r.id].s).filter(o=>o&&!blank(o[d.delitem])).length,0);if(!await ask(`ลบรายการคะแนนนี้?${used?` มีคะแนนแล้ว ${used} คน คะแนนส่วนนี้จะไม่ถูกนับอีก`:""}`,"ลบ")) return;S.config.items=S.config.items.filter(x=>x.id!==d.delitem);persist("config");render();return}
+  if(t.matches("[data-pasteimport]")){pasteImport();return}
+  if(t.matches("[data-psitems]")){pasteItems();return}
+  if(t.matches("[data-psforms]")){pasteForms();return}
+  if(t.matches("[data-applystruct]")){applyStruct();return}
+  if(t.matches("[data-applyses]")){applySessions();return}
+  if(t.matches("[data-applyimp]")){applyImport();return}
+  if(t.matches("[data-addstu]")){const rid=$("#addRoom").value,no=+$("#addNo").value,sid=$("#addSid").value.trim(),name=normName($("#addName").value),dt=$("#addDate").value;
+    if(!rid||!no||!sid||!name){toast("กรอกห้อง เลขที่ เลขประจำตัว และชื่อให้ครบ");return}
+    if(S.rooms.some(r=>r.students.some(s=>s.sid===sid))){toast("เลขประจำตัวนี้มีอยู่แล้วในสมุด");return}
+    const r=S.rooms.find(x=>x.id===rid);r.students.push({no,sid,name,st:"in",inD:dt,outD:"",why:""});r.students.sort((a,b)=>a.no-b.no);persist("rooms");render();toast("เพิ่มนักเรียนย้ายเข้าแล้ว");return}
+  if(t.matches("[data-bmdlg]")){bmDlg();return}
+  if(t.matches("[data-backupall]")){await backupAll();return}
+  if(d.snap){const sn=KV.cache[d.snap];if(sn) await replaceAll(clone(sn.docs),`ย้อนกลับไปใช้ข้อมูลที่สำรองอัตโนมัติเมื่อ ${thD(parseD(d.snap.slice(5,15)),{day:"numeric",month:"short",year:"numeric"})}`);return}
+  if(d.bm){await bmExport(d.bm);return}
+  if(d.export){d.export==="json"?exportJSON():exportCSV(d.export);return}
+}
+document.addEventListener("change",async e=>{
+  const t=e.target,d=t.dataset;
+  try{
+  if(d.due){const sc=S.sc[room().id];sc.due[d.due]=t.checked;persist("sc_"+room().id);render();return}
+  if(d.score){const r=room(),sc=S.sc[r.id],id=S.ui.item.split(":")[1],m=items().find(x=>x.id===id),mx=Number(m.max);let v=t.value===""?null:Number(t.value);
+    const o=sc.s[d.score]=sc.s[d.score]||{};
+    if(v!=null&&(isNaN(v)||v<0||v>mx)){toast(`คะแนนต้องอยู่ระหว่าง 0–${mx}`);t.value=blank(o[id])?"":o[id];return}
+    if(v==null) delete o[id];else o[id]=v;persist("sc_"+r.id);t.classList.toggle("missing",!!sc.due[id]&&v==null);return}
+  if(d.cfg){S.config[d.cfg]=t.value.trim();persist("config");syncTitle();render();return}
+  if(d.cfgp){S.config[d.cfgp]=Math.max(0,Math.min(100,+t.value))/100;persist("config");return}
+  if(d.cfgn){let v=Math.max(0,Math.round(+t.value));if(d.cfgn==="perWeek"){v=Math.max(1,Math.min(5,v||1));S.config.perWeek=v;S.rooms.forEach(ensureRoom);persist("rooms")}else S.config[d.cfgn]=v;persist("config");render();return}
+  if(d.bk){S.books[d.bk]=t.value;persist("books");return}
+  if(t.matches("[data-sessions]")){const lines=t.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!lines.length){toast("ต้องมีอย่างน้อย 1 คาบ");t.value=S.config.sessions.join("\n");return}S.config.sessions=lines;persist("config");render();toast(`บันทึกคาบเรียน ${lines.length} คาบ`);return}
+  if(d.fname){const x=S.config.forms.find(f=>f.id===d.fname);x.name=t.value.trim()||x.name;persist("config");return}
+  if(d.iname){const x=S.config.items.find(f=>f.id===d.iname);x.name=t.value.trim()||x.name;persist("config");return}
+  if(d.iind!=null&&t.matches("[data-iind]")){S.config.items.find(f=>f.id===d.iind).ind=t.value.trim();persist("config");return}
+  if(d.imax){const v=+t.value;if(!(v>0)){toast("คะแนนเต็มต้องมากกว่า 0");return}S.config.items.find(f=>f.id===d.imax).max=v;persist("config");render();return}
+  if(d.ibm){S.config.items.find(f=>f.id===d.ibm).bm=t.value;persist("config");render();return}
+  if(d.lit){S.config.litNames[+d.lit]=t.value.trim()||`รายการที่ ${+d.lit+1}`;persist("config");return}
+  if(d.tt){const [rid,i,f]=d.tt.split(":");const r=S.rooms.find(x=>x.id===rid);r.tt[+i][f]=f==="place"?t.value:+t.value;persist("rooms");return}
+  if(d.sdate){const [rid,sid,f]=d.sdate.split("|");const s=S.rooms.find(x=>x.id===rid).students.find(x=>x.sid===sid);s[f]=t.value;persist("rooms");render();return}
+  if(t.matches("[data-vk15s]")){const f=t.files[0];t.value="";if(f) await importVK15Sessions(f);return}
+  if(t.matches("[data-credits]")){await setCredits(t.value===""?null:Number(t.value));return}
+  if(t.matches("[data-vk15]")){const f=t.files[0];t.value="";if(f) await importVK15(f);return}
+  if(d.sti!=null){STR.items[+d.sti].on=t.checked;reviewStruct(STR);return}
+  if(d.stf!=null){STR.forms[+d.stf].on=t.checked;return}
+  if(d.stn!=null){STR.items[+d.stn].name=t.value;return}
+  if(d.stind!=null){STR.items[+d.stind].ind=t.value;return}
+  if(d.stm!=null){STR.items[+d.stm].max=Number(t.value)||0;reviewStruct(STR);return}
+  if(d.stb!=null){STR.items[+d.stb].bm=t.value;reviewStruct(STR);return}
+  if(t.matches("[data-rosterfile]")){const f=t.files[0];t.value="";if(f) await importFile(f);return}
+  if(t.matches("[data-restoreall]")||t.matches("[data-importbook]")){const file=t.files[0];t.value="";if(!file) return;let o;try{o=JSON.parse(await file.text())}catch(err){toast("ไฟล์นี้ไม่ใช่ไฟล์สำรองของสมุด");return}
+    if(o&&o.v===3&&o.docs&&t.matches("[data-restoreall]")){await replaceAll(o.docs,`กู้คืนจากไฟล์สำรองทุกวิชา (สำรองเมื่อ ${o.at?thD(new Date(o.at),{day:"numeric",month:"short",year:"numeric"}):"-"})`);return}
+    if(o&&o.config&&o.rooms){await importBookFile(o);return}
+    toast(t.matches("[data-restoreall]")?"ไฟล์นี้ไม่ใช่ไฟล์สำรองทุกวิชา":"ไฟล์นี้ไม่ใช่ไฟล์สำรองรายวิชา");return}
+  if(t.matches("[data-restore]")){const file=t.files[0];t.value="";if(!file) return;let o;try{o=JSON.parse(await file.text())}catch(err){toast("ไฟล์นี้ไม่ใช่ไฟล์สำรองของสมุด");return}
+    if(!o||!o.rooms||!o.config){toast("ไฟล์นี้ไม่ใช่ไฟล์สำรองของสมุด");return}
+    if(!await ask(`กู้คืนจะแทนที่ข้อมูลทั้งหมดของสมุด “${esc(bookTitle(S.config))}” ดำเนินการต่อ?`,"กู้คืน")) return;
+    if(!o.v){toast("ไฟล์สำรองรุ่นเดิม: ใช้ได้เฉพาะรายชื่อและเช็กชื่อ");o={config:Object.assign({},S.config,{start:o.config.start||S.config.start,holidays:o.config.holidays||[]}),rooms:o.rooms,att:o.att||{},sc:{},logs:o.logs||[]}}
+    S.config=newConfig(o.config);S.rooms=o.rooms;S.att=o.att||{};S.sc=o.sc||{};S.logs=o.logs||[];S.rooms.forEach(r=>{ensureRoom(r);watch("att_"+r.id);watch("sc_"+r.id)});S.ui.room=S.rooms[0]&&S.rooms[0].id;S.ui.k=null;
+    ["config","rooms","logs",...S.rooms.flatMap(r=>["att_"+r.id,"sc_"+r.id])].forEach(persist);syncTitle();render();toast("กู้คืนข้อมูลแล้ว")}
+  }catch(err){console.error(err);toast("เกิดข้อผิดพลาด ("+(err&&err.message||err)+")")}
+});
+document.addEventListener("submit",e=>{
+  if(e.target.id!=="logForm") return;e.preventDefault();
+  const f=e.target,fd=Object.fromEntries(new FormData(f).entries());
+  if(!fd.sid){toast("เลือกนักเรียนก่อน");return}
+  const id=f.dataset.id||("L"+Date.now().toString(36)+Math.random().toString(36).slice(2,6));
+  const rec=Object.assign({id,room:f.dataset.room},fd);
+  const i=S.logs.findIndex(x=>x.id===id);if(i>=0) S.logs[i]=rec;else S.logs.push(rec);
+  persist("logs");closeDlg();render();toast("บันทึกแล้ว");
+});
+$("#cfm").addEventListener("cancel",()=>{const r=cfmResolve;cfmResolve=null;if(r) r(false)});
+boot();
+</script>
+</body>
+</html>
